@@ -1,0 +1,92 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ */
+
+package com.mycompany.taskmanager.app;
+import com.mycompany.taskmanager.controller.TaskManager;
+import java.util.Scanner;
+/**
+ *
+ * @author willianfrota
+ */
+public class Main {
+
+    public static void main(String[] args) {
+        boolean sair = false;
+        Scanner sc = new Scanner(System.in);
+        TaskManager gerenciador = new TaskManager();
+        
+        do{
+            System.out.println("===== GERENCIADOR DE TAREFAS =====\n");
+            System.out.println("1. Criar nova tarefa\n");
+            System.out.println("2. Listar tarefas\n");
+            System.out.println("3. Marcar tarefa como concluída\n");
+            System.out.println("4. Remover tarefa\n");
+            System.out.println("5. Sair\n");
+            System.out.println("Escolha uma opção:\n");
+            int operacao;
+            try{
+                operacao = Integer.parseInt(sc.nextLine());      //nesse caso sc.nextInt() geraria outra excecao 
+            } catch(NumberFormatException e){
+                System.out.println("Operacao invalida");
+                continue;
+            }
+            
+            
+            switch(operacao){
+                case 1:
+                    System.out.println("Essa tarefa é prioridade? (s / n)");
+                    String ehPrioridade = sc.nextLine();
+                    boolean prioridade = false;
+                    if(ehPrioridade.equalsIgnoreCase("s")){
+                        prioridade = true;
+                    } else if(ehPrioridade.equalsIgnoreCase("n")){
+                        prioridade = false;
+                    } else{
+                        System.out.println("Já que voce digitou errado, não é prioridade");
+                    }
+                    System.out.println("Diga o titulo dessa tarefa:");
+                    String titulo = sc.nextLine();
+                    System.out.println("Diga a descricao dessa tarefa:");
+                    String descricao = sc.nextLine();
+                    gerenciador.adicionarTarefa(titulo, descricao, prioridade);
+
+                    break;
+                case 2:
+                    gerenciador.listarTarefas();
+                    break;
+                case 3:
+                    gerenciador.listarTarefas();
+                    try{
+                        System.out.println("\n Diga um indice:");
+                        int indice = Integer.parseInt(sc.nextLine());
+                        gerenciador.concluirTarefa(indice);
+                    } catch(NumberFormatException e){
+                        System.out.println("Digite um numero!");
+                    } catch(IndexOutOfBoundsException e){
+                        System.out.println("Esse numero nao esta na lista");
+                    }
+                    break;
+                case 4:
+                    gerenciador.listarTarefas();
+                    try{
+                        System.out.println("\n Diga um indice:");
+                        int indice = Integer.parseInt(sc.nextLine());
+                        gerenciador.removerTarefa(indice);
+                    } catch(NumberFormatException e){
+                        System.out.println("Digite um numero!");
+                    } catch(IndexOutOfBoundsException e){
+                        System.out.println("Esse numero nao esta na lista");
+                    }
+                    break;
+                case 5:
+                    sair = true;
+                    break;
+                default:
+                    System.out.println("Opção invalida");
+            }
+        } while(!sair);
+        
+        
+    }
+}
