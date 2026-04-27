@@ -4,10 +4,35 @@
  */
 package com.mycompany.taskmanager.controller;
 
+import com.mycompany.taskmanager.model.Tarefa;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author willianfrota
  */
-public class Lista {
+public class Lista <T extends Tarefa>{
+    List<T> minhaLista = new ArrayList<>();
+    
+    public void adicionar(T item){
+        minhaLista.add(item);
+    } 
+    public T obter(int indice){
+        return minhaLista.get(indice);
+        
+    }
+    public void listar(){
+        for(Tarefa tf : minhaLista){
+            System.out.println(tf);
+        }    
+    }
+    public void remover(int indice){
+        minhaLista.remove(indice);
+    }
+    public int tamanhoLista(){
+        return minhaLista.size();
+    
+    }
     
 }

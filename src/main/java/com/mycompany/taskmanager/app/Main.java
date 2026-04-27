@@ -68,7 +68,7 @@ public class Main {
                     try{
                         System.out.println("\n Diga um indice:");
                         int indice = Integer.parseInt(sc.nextLine());
-                        gerenciador.concluirTarefa(indice);
+                        gerenciador.concluirTarefa(listaTarefa, listaTarefaPrio,indice);
                     } catch(NumberFormatException e){
                         System.out.println("Digite um numero!");
                     } catch(IndexOutOfBoundsException e){
@@ -80,7 +80,7 @@ public class Main {
                     try{
                         System.out.println("\n Diga um indice:");
                         int indice = Integer.parseInt(sc.nextLine());
-                        gerenciador.removerTarefa(indice);
+                        gerenciador.removerTarefa(listaTarefa, listaTarefaPrio,indice);
                     } catch(NumberFormatException e){
                         System.out.println("Digite um numero!");
                     } catch(IndexOutOfBoundsException e){

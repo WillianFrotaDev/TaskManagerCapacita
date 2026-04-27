@@ -32,19 +32,19 @@ public class TaskManager {
     }
     public void removerTarefa(Lista<Tarefa> tarefinhas, Lista<TarefaPrioritaria> tarefinhasPrio, int indice){// vai uma excecao
         if(indice <= tarefinhasPrio.tamanhoLista()){
-            tarefinhasPrio.remover(indice);
+            tarefinhasPrio.remover(indice -1);
         } else if(indice > tarefinhasPrio.tamanhoLista()){
-            tarefinhas.remover(indice - tarefinhasPrio.tamanhoLista());
+            tarefinhas.remover(indice - tarefinhasPrio.tamanhoLista() - 1);
         }
         
-        tarefinhas.remover(indice - 1);
+        
     }
     public void concluirTarefa(Lista<Tarefa> tarefinhas, Lista<TarefaPrioritaria> tarefinhasPrio,int indice){ // vai uma excecao
         if(indice <= tarefinhasPrio.tamanhoLista()){
-            TarefaPrioritaria tarePrio = tarefinhasPrio.obter(indice);
+            TarefaPrioritaria tarePrio = tarefinhasPrio.obter(indice -1);
             tarePrio.concluir();
         } else if(indice > tarefinhasPrio.tamanhoLista()){
-            Tarefa tare = tarefinhas.obter(indice - tarefinhasPrio.tamanhoLista());
+            Tarefa tare = tarefinhas.obter(indice - tarefinhasPrio.tamanhoLista() - 1);
             tare.concluir();
         }
         
