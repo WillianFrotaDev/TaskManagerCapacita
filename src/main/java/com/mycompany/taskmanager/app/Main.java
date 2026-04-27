@@ -3,7 +3,13 @@
  */
 
 package com.mycompany.taskmanager.app;
+import com.mycompany.taskmanager.controller.Lista;
 import com.mycompany.taskmanager.controller.TaskManager;
+import com.mycompany.taskmanager.model.Tarefa;
+import com.mycompany.taskmanager.model.TarefaPrioritaria;
+import com.mycompany.taskmanager.util.Util;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 /**
  *
@@ -15,15 +21,11 @@ public class Main {
         boolean sair = false;
         Scanner sc = new Scanner(System.in);
         TaskManager gerenciador = new TaskManager();
+        Lista<Tarefa> listaTarefa = new Lista<>();
+        Lista<TarefaPrioritaria> listaTarefaPrio = new Lista<>();
         
         do{
-            System.out.println("===== GERENCIADOR DE TAREFAS =====\n");
-            System.out.println("1. Criar nova tarefa\n");
-            System.out.println("2. Listar tarefas\n");
-            System.out.println("3. Marcar tarefa como concluída\n");
-            System.out.println("4. Remover tarefa\n");
-            System.out.println("5. Sair\n");
-            System.out.println("Escolha uma opção:\n");
+            Util.menu();
             int operacao;
             try{
                 operacao = Integer.parseInt(sc.nextLine());      //nesse caso sc.nextInt() geraria outra excecao 
@@ -35,28 +37,34 @@ public class Main {
             
             switch(operacao){
                 case 1:
-                    System.out.println("Essa tarefa é prioridade? (s / n)");
-                    String ehPrioridade = sc.nextLine();
-                    boolean prioridade = false;
-                    if(ehPrioridade.equalsIgnoreCase("s")){
-                        prioridade = true;
-                    } else if(ehPrioridade.equalsIgnoreCase("n")){
-                        prioridade = false;
-                    } else{
-                        System.out.println("Já que voce digitou errado, não é prioridade");
-                    }
                     System.out.println("Diga o titulo dessa tarefa:");
                     String titulo = sc.nextLine();
                     System.out.println("Diga a descricao dessa tarefa:");
                     String descricao = sc.nextLine();
-                    gerenciador.adicionarTarefa(titulo, descricao, prioridade);
-
+                    System.out.println("Essa tarefa é prioridade? (s / n)");
+                    String ehPrioridade = sc.nextLine();
+                    boolean prioridade = false;
+                    Tarefa tarefa;
+                    TarefaPrioritaria tarefaPrio;
+                    if(ehPrioridade.equalsIgnoreCase("s")){
+                        tarefaPrio = new TarefaPrioritaria(titulo, descricao);
+                        gerenciador.adicionarTarefa(listaTarefaPrio, tarefaPrio);
+                        
+                    } else if(ehPrioridade.equalsIgnoreCase("n")){
+                        tarefa = new Tarefa(titulo, descricao);
+                        gerenciador.adicionarTarefa(listaTarefa, tarefa);
+                        
+                        
+                    } else{
+                        System.out.println("Já que voce digitou errado, não é prioridade");
+                    }
                     break;
+                    
                 case 2:
-                    gerenciador.listarTarefas();
+                    gerenciador.listarTarefas(listaTarefa, listaTarefaPrio);
                     break;
                 case 3:
-                    gerenciador.listarTarefas();
+                    gerenciador.listarTarefas(listaTarefa, listaTarefaPrio);
                     try{
                         System.out.println("\n Diga um indice:");
                         int indice = Integer.parseInt(sc.nextLine());
@@ -68,7 +76,7 @@ public class Main {
                     }
                     break;
                 case 4:
-                    gerenciador.listarTarefas();
+                    gerenciador.listarTarefas(listaTarefa, listaTarefaPrio);
                     try{
                         System.out.println("\n Diga um indice:");
                         int indice = Integer.parseInt(sc.nextLine());
