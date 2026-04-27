@@ -6,40 +6,46 @@ package com.mycompany.taskmanager.controller;
 import com.mycompany.taskmanager.model.Tarefa;
 import com.mycompany.taskmanager.model.TarefaPrioritaria;
 import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author willianfrota
  */
 public class TaskManager {
-    ArrayList<Tarefa> tarefinhas;
+    
     
     public TaskManager(){
-         tarefinhas = new ArrayList<>();
+         
     }
-    public void adicionarTarefa(String titulo, String descricao, boolean prioridade){
-        if(prioridade){
-            Tarefa p = new TarefaPrioritaria(titulo, descricao);
-            tarefinhas.add(0, p);
-        } else{
-            Tarefa t = new Tarefa(titulo, descricao);
-            tarefinhas.add(t);
+    public <T extends Tarefa> void adicionarTarefa(Lista<T> listinha, T tarefinha){
+        listinha.adicionar(tarefinha);
+    }
+    public void listarTarefas(Lista<Tarefa> tarefinhas, Lista<TarefaPrioritaria> tarefinhasPrio){
+        for(int i = 0; i < tarefinhasPrio.tamanhoLista(); i++){
+            TarefaPrioritaria tarefaPrio = tarefinhasPrio.obter(i);
+            System.out.println((i+1) + "- " + tarefaPrio.getTitulo() + " | Descrição: " + tarefaPrio.getDescricao() + " | Status:" + (tarefaPrio.getConcluida() ? "✔" : "❌X"));
+        }
+        for(int i = 0; i < tarefinhas.tamanhoLista(); i++){
+            Tarefa tare = tarefinhas.obter(i);
+            System.out.println((i+ tarefinhasPrio.tamanhoLista() + 1) + "- " + tare.getTitulo() + " | Descrição: " + tare.getDescricao() + " | Status:" + (tare.getConcluida() ? "✔" : "❌X"));
         }
     }
-    public void listarTarefas(){
-        for(int i = 0; i < tarefinhas.size(); i++){
-            Tarefa tari = tarefinhas.get(i);
-            System.out.println((i+1) + "- " + tari.getTitulo() + " | Descrição: " + tari.getDescricao() + " | Status:" + (tari.getConcluida() ? "✔" : "❌"));
+    public void removerTarefa(Lista<Tarefa> tarefinhas, Lista<TarefaPrioritaria> tarefinhasPrio, int indice){// vai uma excecao
+        if(indice <= tarefinhasPrio.tamanhoLista()){
+            tarefinhasPrio.remover(indice);
+        } else if(indice > tarefinhasPrio.tamanhoLista()){
+            tarefinhas.remover(indice - tarefinhasPrio.tamanhoLista());
         }
+        
+        tarefinhas.remover(indice - 1);
     }
-    public void removerTarefa(int i){// vai uma excecao
-        tarefinhas.remove(i - 1);
-    }
-    public void concluirTarefa(int i){ // vai uma excecao
-        Tarefa ti = tarefinhas.get(i -1);
-        if(ti.concluir()){
-            System.out.println("Tarefa concluida");
-        } else{
-            System.out.println("Esta tarefa ja esta concluida");
+    public void concluirTarefa(Lista<Tarefa> tarefinhas, Lista<TarefaPrioritaria> tarefinhasPrio,int indice){ // vai uma excecao
+        if(indice <= tarefinhasPrio.tamanhoLista()){
+            TarefaPrioritaria tarePrio = tarefinhasPrio.obter(indice);
+            tarePrio.concluir();
+        } else if(indice > tarefinhasPrio.tamanhoLista()){
+            Tarefa tare = tarefinhas.obter(indice - tarefinhasPrio.tamanhoLista());
+            tare.concluir();
         }
         
         
