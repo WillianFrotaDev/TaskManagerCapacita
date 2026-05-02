@@ -17,10 +17,10 @@ public class TaskManager {
     public TaskManager(){
          
     }
-    public <T extends Tarefa> void adicionarTarefa(Lista<T> listinha, T tarefinha){
+    public <T extends Tarefa> void adicionarTarefa(ListaDeTarefas<T> listinha, T tarefinha){
         listinha.adicionar(tarefinha);
     }
-    public void listarTarefas(Lista<Tarefa> tarefinhas, Lista<TarefaPrioritaria> tarefinhasPrio){
+    public void listarTarefas(ListaDeTarefas<Tarefa> tarefinhas, ListaDeTarefas<TarefaPrioritaria> tarefinhasPrio){
         for(int i = 0; i < tarefinhasPrio.tamanhoLista(); i++){
             TarefaPrioritaria tarefaPrio = tarefinhasPrio.obter(i);
             System.out.println((i+1) + "- " + tarefaPrio.getTitulo() + " | Descrição: " + tarefaPrio.getDescricao() + " | Status:" + (tarefaPrio.getConcluida() ? "✔" : "❌X"));
@@ -30,7 +30,7 @@ public class TaskManager {
             System.out.println((i+ tarefinhasPrio.tamanhoLista() + 1) + "- " + tare.getTitulo() + " | Descrição: " + tare.getDescricao() + " | Status:" + (tare.getConcluida() ? "✔" : "❌X"));
         }
     }
-    public void removerTarefa(Lista<Tarefa> tarefinhas, Lista<TarefaPrioritaria> tarefinhasPrio, int indice){// vai uma excecao
+    public void removerTarefa(ListaDeTarefas<Tarefa> tarefinhas, ListaDeTarefas<TarefaPrioritaria> tarefinhasPrio, int indice){// vai uma excecao
         if(indice <= tarefinhasPrio.tamanhoLista()){
             tarefinhasPrio.remover(indice -1);
         } else if(indice > tarefinhasPrio.tamanhoLista()){
@@ -39,7 +39,7 @@ public class TaskManager {
         
         
     }
-    public void concluirTarefa(Lista<Tarefa> tarefinhas, Lista<TarefaPrioritaria> tarefinhasPrio,int indice){ // vai uma excecao
+    public void concluirTarefa(ListaDeTarefas<Tarefa> tarefinhas, ListaDeTarefas<TarefaPrioritaria> tarefinhasPrio,int indice){ // vai uma excecao
         if(indice <= tarefinhasPrio.tamanhoLista()){
             TarefaPrioritaria tarePrio = tarefinhasPrio.obter(indice -1);
             tarePrio.concluir();

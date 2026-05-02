@@ -3,7 +3,7 @@
  */
 
 package com.mycompany.taskmanager.app;
-import com.mycompany.taskmanager.controller.Lista;
+import com.mycompany.taskmanager.controller.ListaDeTarefas;
 import com.mycompany.taskmanager.controller.TaskManager;
 import com.mycompany.taskmanager.model.Tarefa;
 import com.mycompany.taskmanager.model.TarefaPrioritaria;
@@ -21,8 +21,8 @@ public class Main {
         boolean sair = false;
         Scanner sc = new Scanner(System.in);
         TaskManager gerenciador = new TaskManager();
-        Lista<Tarefa> listaTarefa = new Lista<>();
-        Lista<TarefaPrioritaria> listaTarefaPrio = new Lista<>();
+        ListaDeTarefas<Tarefa> listaTarefa = new ListaDeTarefas<>();
+        ListaDeTarefas<TarefaPrioritaria> listaTarefaPrio = new ListaDeTarefas<>();
         
         do{
             Util.menu();

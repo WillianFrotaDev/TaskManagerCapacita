@@ -4,6 +4,7 @@
  */
 package com.mycompany.taskmanager.controller;
 
+import com.mycompany.taskmanager.model.Lista;
 import com.mycompany.taskmanager.model.Tarefa;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  *
  * @author willianfrota
  */
-public class Lista <T extends Tarefa>{
+public class ListaDeTarefas<T extends Tarefa> implements Lista<T> {
     List<T> minhaLista = new ArrayList<>();
     
     public void adicionar(T item){
