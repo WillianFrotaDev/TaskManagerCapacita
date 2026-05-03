@@ -20,10 +20,14 @@ public class TaskManager {
     public <T extends Tarefa> void adicionarTarefa(ListaDeTarefas<? super Tarefa> listinha, T tarefinha){
         listinha.adicionar(tarefinha);
     }
+    public void adicionarTarefaPrioritaria(ListaDeTarefas<? super TarefaPrioritaria> listinha,TarefaPrioritaria tarefinha) {
+        listinha.adicionar(tarefinha);
+}
     
     public void listarTarefas(ListaDeTarefas<? extends Tarefa> tarefinhas, ListaDeTarefas<? extends Tarefa> tarefinhasPrio){
         int start = 1;
         int index = tarefinhasPrio.listar(start);
+        tarefinhas.listar(index);
         
     }
     public void removerTarefa(ListaDeTarefas<Tarefa> tarefinhas, ListaDeTarefas<TarefaPrioritaria> tarefinhasPrio, int indice){// vai uma excecao

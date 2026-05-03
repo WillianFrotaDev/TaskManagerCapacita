@@ -26,8 +26,8 @@ public class ListaDeTarefas<T extends Tarefa> implements Lista<T> {
     public int listar(int start){
         
         for(int i = 0; i < minhaLista.size(); i++){
-            Tarefa t = minhaLista.get(i);
-            System.out.println((i+1) + "- " + t.getTitulo() + " | Descrição: " + t.getDescricao() + " | Status:" + (t.getConcluida() ? "✔" : "❌X"));
+            T t = minhaLista.get(i);
+            System.out.println((start+1) + "- " + t.getTitulo() + " | Descrição: " + t.getDescricao() + " | Status:" + (t.getConcluida() ? "✔" : "❌X"));
         }
        
         return start + minhaLista.size();
