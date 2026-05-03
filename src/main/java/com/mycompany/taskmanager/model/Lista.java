@@ -17,5 +17,5 @@ public interface Lista<T> {
 
     int tamanhoLista();
 
-    int listar(int start);
+    
 }
