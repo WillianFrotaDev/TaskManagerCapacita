@@ -8,7 +8,7 @@ package com.mycompany.taskmanager.model;
  *
  * @author willianfrota
  */
-public interface Lista<T extends Tarefa> {
+public interface Lista<T> {
     void adicionar(T item);
 
     T obter(int indice);
@@ -17,5 +17,5 @@ public interface Lista<T extends Tarefa> {
 
     int tamanhoLista();
 
-    void listar();
+    int listar(int start);
 }

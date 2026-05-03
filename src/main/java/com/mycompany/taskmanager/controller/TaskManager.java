@@ -17,18 +17,14 @@ public class TaskManager {
     public TaskManager(){
          
     }
-    public <T extends Tarefa> void adicionarTarefa(ListaDeTarefas<T> listinha, T tarefinha){
+    public <T extends Tarefa> void adicionarTarefa(ListaDeTarefas<? super Tarefa> listinha, T tarefinha){
         listinha.adicionar(tarefinha);
     }
-    public void listarTarefas(ListaDeTarefas<Tarefa> tarefinhas, ListaDeTarefas<TarefaPrioritaria> tarefinhasPrio){
-        for(int i = 0; i < tarefinhasPrio.tamanhoLista(); i++){
-            TarefaPrioritaria tarefaPrio = tarefinhasPrio.obter(i);
-            System.out.println((i+1) + "- " + tarefaPrio.getTitulo() + " | Descrição: " + tarefaPrio.getDescricao() + " | Status:" + (tarefaPrio.getConcluida() ? "✔" : "❌X"));
-        }
-        for(int i = 0; i < tarefinhas.tamanhoLista(); i++){
-            Tarefa tare = tarefinhas.obter(i);
-            System.out.println((i+ tarefinhasPrio.tamanhoLista() + 1) + "- " + tare.getTitulo() + " | Descrição: " + tare.getDescricao() + " | Status:" + (tare.getConcluida() ? "✔" : "❌X"));
-        }
+    
+    public void listarTarefas(ListaDeTarefas<? extends Tarefa> tarefinhas, ListaDeTarefas<? extends Tarefa> tarefinhasPrio){
+        int start = 1;
+        int index = tarefinhasPrio.listar(start);
+        
     }
     public void removerTarefa(ListaDeTarefas<Tarefa> tarefinhas, ListaDeTarefas<TarefaPrioritaria> tarefinhasPrio, int indice){// vai uma excecao
         if(indice <= tarefinhasPrio.tamanhoLista()){
