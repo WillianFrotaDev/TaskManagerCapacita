@@ -4,6 +4,8 @@
  */
 package com.mycompany.taskmanager.controller;
 
+import com.mycompany.taskmanager.model.Tarefa;
+import com.mycompany.taskmanager.model.TarefaPrioritaria;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -12,10 +14,13 @@ import javafx.scene.control.ListView;
  * @author willianfrota
  */
 public class MainController {
+    @FXML 
+    private ListView<Tarefa> listaTarefas;
     @FXML
-    private ListView<String> listaTarefas;
-    @FXML
-    private void adicionar() {}
+    private void adicionar() {
+        
+        
+    }
 
     @FXML
     private void remover() {}

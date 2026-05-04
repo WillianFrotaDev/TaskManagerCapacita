@@ -33,6 +33,9 @@ public class Tarefa {
     public boolean getConcluida(){
         return concluido;
     }
+    public int getPrioridade(){
+        return 0;
+    }
     public boolean concluir(){ // uma parada que eu nao sabia quando é um metodo booleano precisa returnar true ou false
         if(this.concluido){
             return false;

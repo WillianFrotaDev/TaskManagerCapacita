@@ -16,4 +16,8 @@ public class TarefaPrioritaria extends Tarefa{
     public String getTitulo(){
         return "| PRIORIDADE " + super.getTitulo();// detalhe sem esse super ele nao busca da classe mae Tarefa
     }
+    @Override
+    public int getPrioridade(){
+        return 1;
+    }
 }
