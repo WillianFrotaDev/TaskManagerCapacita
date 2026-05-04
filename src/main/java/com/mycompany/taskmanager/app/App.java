@@ -5,6 +5,7 @@
 package com.mycompany.taskmanager.app;
 import javafx.stage.Stage;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -14,17 +15,17 @@ import javafx.scene.layout.VBox;
  * @author willianfrota
  */
 public class App extends Application {
-    private ListView<String> listaVisual = new ListView<>();
+    
     @Override
-    public void start(Stage stage){
-        Label titulo = new Label("Gerenciador de Tarefas");
-        Label texto = new Label("Javafx funcionando!");
-        VBox layout = new VBox(texto);
+    public void start(Stage stage) throws Exception{
+        FXMLLoader loader = new FXMLLoader(
+            getClass().getResource("/com/mycompany/taskmanager/view/main.fxml")
+        );
         
-        layout.setStyle("-fx-padding: 20; -fx-font-size: 20px;");
 
-        Scene scene = new Scene(layout, 400, 300);
-
+        Scene scene = new Scene(loader.load());
+        stage.setWidth(800);
+        stage.setHeight(600);
         stage.setTitle("Task Manager");
         stage.setScene(scene);
         stage.show();
