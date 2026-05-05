@@ -9,6 +9,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 
     
   <VBox spacing="20.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.taskmanager.controller.MainController" style="-fx-padding: 20;">
@@ -31,6 +33,11 @@
 
         <!-- LISTA DE TAREFAS -->
         <ListView fx:id="listaTarefas" HBox.hgrow="ALWAYS"/>
+        
+        <VBox fx:id="formNovaTarefa" visible="false" managed="false">
+            <TextField fx:id="campoTitulo" promptText="Título"/>
+            <TextArea fx:id="campoDescricao" promptText="Descrição"/>
+        </VBox>
 
     </HBox>
 
