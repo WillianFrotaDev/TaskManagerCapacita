@@ -44,4 +44,5 @@
             </plugin>
         </plugins>
     </build>
+    <name>TaskManager</name>
 </project>
