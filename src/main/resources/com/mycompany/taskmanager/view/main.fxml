@@ -11,35 +11,66 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
 
     
-  <VBox spacing="20.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.taskmanager.controller.MainController" style="-fx-padding: 20;">
-    <!-- TÍTULO -->
-    <Label text="GERENCIADOR DE TAREFAS"
-           style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.mycompany.taskmanager.controller.MainController"
+            style="-fx-background-color: #f4f6f8;">
 
-    <!-- CONTEÚDO PRINCIPAL -->
-    <HBox spacing="20">
-
-        <!-- MENU LATERAL -->
-        <VBox spacing="10">
-
-            <Button text="Adicionar" onAction="#adicionar"/>
-            <Button text="Remover" onAction="#remover"/>
-            <Button text="Editar" onAction="#editar"/>
-            <Button text="Concluir" onAction="#concluir"/>
-
+    <top>
+        <VBox spacing="6" style="-fx-background-color: #263238; -fx-padding: 22;">
+            <Label text="GERENCIADOR DE TAREFAS"
+                   style="-fx-text-fill: white; -fx-font-size: 26px; -fx-font-weight: bold;" />
+            <Label text="Organize, conclua, edite e remova suas tarefas"
+                   style="-fx-text-fill: #cfd8dc; -fx-font-size: 13px;" />
         </VBox>
+    </top>
 
-        <!-- LISTA DE TAREFAS -->
-        <ListView fx:id="listaTarefas" HBox.hgrow="ALWAYS"/>
-        
-        <VBox fx:id="formNovaTarefa" visible="false" managed="false">
-            <TextField fx:id="campoTitulo" promptText="Título"/>
-            <TextArea fx:id="campoDescricao" promptText="Descrição"/>
+    <left>
+        <VBox spacing="12" prefWidth="170" style="-fx-background-color: white; -fx-padding: 20;">
+            <Button text="Adicionar" maxWidth="Infinity" onAction="#adicionar"
+                    style="-fx-background-color: #1976d2; -fx-text-fill: white; -fx-font-weight: bold;" />
+            <Button text="Editar" maxWidth="Infinity" onAction="#editar" />
+            <Button text="Concluir" maxWidth="Infinity" onAction="#concluir" />
+            <Button text="Remover" maxWidth="Infinity" onAction="#remover"
+                    style="-fx-background-color: #d32f2f; -fx-text-fill: white; -fx-font-weight: bold;" />
+            <Region VBox.vgrow="ALWAYS" />
+            <Label fx:id="labelTotal" text="Total: 0" style="-fx-text-fill: #607d8b;" />
         </VBox>
+    </left>
 
-    </HBox>
+    <center>
+        <VBox spacing="12" style="-fx-padding: 20;">
+            <Label text="Minhas tarefas" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <ListView fx:id="listaTarefas" VBox.vgrow="ALWAYS" />
+        </VBox>
+    </center>
 
+    <right>
+        <VBox fx:id="formNovaTarefa" spacing="12" prefWidth="300" visible="false" managed="false"
+              style="-fx-background-color: white; -fx-padding: 20;">
+            <Label fx:id="labelFormulario" text="Nova tarefa"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold;" />
 
-  </VBox>
+            <Label text="Título" />
+            <TextField fx:id="campoTitulo" promptText="Ex: Estudar JavaFX" />
+
+            <Label text="Descrição" />
+            <TextArea fx:id="campoDescricao" promptText="Digite os detalhes da tarefa" prefRowCount="6" wrapText="true" />
+
+            <CheckBox fx:id="checkPrioridade" text="Tarefa prioritária" />
+
+            <HBox spacing="10">
+                <Button text="Salvar" onAction="#salvar" HBox.hgrow="ALWAYS"
+                        style="-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-font-weight: bold;" />
+                <Button text="Cancelar" onAction="#cancelar" />
+            </HBox>
+        </VBox>
+    </right>
+
+    <padding>
+        <Insets top="0" right="0" bottom="0" left="0" />
+    </padding>
+</BorderPane>
