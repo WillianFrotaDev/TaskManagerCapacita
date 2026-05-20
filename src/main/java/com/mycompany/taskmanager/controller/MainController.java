@@ -55,8 +55,34 @@ public class MainController {
     private void initialize(){ // esse metodo ele é ativado automaticamente quando a tela FXML termina de carregar, toda vez que voce adicionar, remover ou editar ele vai ativar esse metodo
         
         listaTarefas.setItems(tarefasNaTela);// serve para mostrar os dados de outra lista, detalhe toda vez que
-        listaTarefas.setCellFactory(lista -> new ListCell<>(){
-         
+        
+        listaTarefas.setCellFactory(lista -> new ListCell<>(){// isso serve para configurar como cada tarefa aparece na lista, normalmente ListView funciona com o toString porem com esse ListCell da para editar cada cedula da lista
+            
+            @Override
+            protected void updateItem(Tarefa tarefa, boolean empty){// esse metodo é chamado toda vez que precisa atualizar a lista alterando algum item
+                super.updateItem(tarefa, empty);// chama o metodo original da classe ListCell para adicionar novos processos ao metodo
+                
+                if (empty || tarefa == null) { // verificar se a celular esta vazia ou se a tarefa esta vazia, nesses dois casos vai ser limpa automaticamente
+                    // esse processo acontece porque o ListView pode criar celulas extras invisiveis ou reutilizar celulas antigas
+                    
+                    setText(null);// limpar o texto da celula
+                    setStyle("");// limpa o estilo da celula
+                    return;// serve para que uma celula vazia nao mostre um texto de uma antiga tarefa
+                }
+                
+                String prioridade = tarefa instanceof TarefaPrioritaria ? "[PRIORIDADE] " : "";// verifica se o objeto tarefa é tarefa prioritaria se for vai ter o texto Prioridade se nao fica sem nada
+                String status = tarefa.getConcluida() ? "Concluída" : "Pendente";//usando o metodo que eu criei no backend para verificar e mais na frente atribuir tambem
+
+                setText(prioridade + limparTitulo(tarefa.getTitulo()) + "\n" + tarefa.getDescricao() + "\nStatus: " + status);
+
+                if (tarefa.getConcluida()) {
+                    setStyle("-fx-text-fill: #607d8b; -fx-background-color: #e8f5e9; -fx-padding: 10;");
+                } else if (tarefa instanceof TarefaPrioritaria) {
+                    setStyle("-fx-text-fill: #263238; -fx-background-color: #fff3e0; -fx-padding: 10;");
+                } else {
+                    setStyle("-fx-text-fill: #263238; -fx-padding: 10;");
+                }
+            }
             
         
         });
@@ -77,5 +103,10 @@ public class MainController {
 
     @FXML
     private void concluir() {}
+    
+    @FXML
+    private String limparTitulo(String titulo){
+        return titulo.replace(" | PRIORIDADE ", "").replace(" | TÍTULO: ", "");
+    }
     
 }

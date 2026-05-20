@@ -24,7 +24,7 @@ public class App extends Application {
         // getClass serve para pegar a classe atual do objeto (nesse caso com.mycompany.taskmanager.app.App) quando nao esta associado a um objeto ele usa a classe que voce esta editando
         // url: Uniform Resource Locator
         // nesse caso ele aponta para o caminho do FXML compilado, que nesse caso seria o caminho da classe atual
-        // entendi agora apartir da classe a atual, ela tem um metodo chamado getResource que determina onde esta o caminho do arquivo fxml
+        // entendi agora apartir da classe a atual, ela tem um metodo chamado getResource que determina onde esta o caminho do arquivo fxmlé
         
         Parent root = loader.load();// diferente de usar o loader.load direto no scene é que da pra estilizar o root antes de carregar a janela
         // usando o root da para reutilizar o codigo
