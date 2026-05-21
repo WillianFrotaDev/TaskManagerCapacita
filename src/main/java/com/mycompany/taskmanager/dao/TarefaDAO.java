@@ -4,10 +4,17 @@
  */
 package com.mycompany.taskmanager.dao;
 
+import com.mycompany.taskmanager.db.ConexaoFactory;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
+
 /**
  *
  * @author willianfrota
  */
 public class TarefaDAO {
+    Connection conexao = ConexaoFactory.conectar();
+    
     
 }
