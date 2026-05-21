@@ -9,6 +9,8 @@ package com.mycompany.taskmanager.model;
  * @author willianfrota
  */
 public class Tarefa {
+    
+    private int id;
     private String titulo;
     private String descricao;
     private boolean concluido;
@@ -43,4 +45,12 @@ public class Tarefa {
         this.concluido = true;
         return true;
     }
+    public int getId() {// id para o banco de dados buscar
+        return id;
+    }
+
+    public void setId(int id) {// para o banco de dados determina o id
+        this.id = id;
+    }
+
 }
