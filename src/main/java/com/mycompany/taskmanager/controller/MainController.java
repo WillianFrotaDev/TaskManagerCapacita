@@ -54,14 +54,14 @@ public class MainController {
     private Tarefa editaTarefa;// guarda uma tarefa que vai ser editada no momento
     
     @FXML
-    private void initialize(){ // esse metodo ele é ativado automaticamente quando a tela FXML termina de carregar, toda vez que voce adicionar, remover ou editar ele vai ativar esse metodo
+    private void initialize(){ // esse metodo so roda uma vez, quando é feito alguma alteracao quem atualiza a lista é atualizarLista
         
-        listaTarefas.setItems(tarefasNaTela);// serve para mostrar os dados de outra lista, detalhe toda vez que
+        listaTarefas.setItems(tarefasNaTela);// serve para conectar o Observable list com o ListView
         
         listaTarefas.setCellFactory(lista -> new ListCell<>(){// isso serve para configurar como cada tarefa aparece na lista, normalmente ListView funciona com o toString porem com esse ListCell da para editar cada cedula da lista
             
             @Override
-            protected void updateItem(Tarefa tarefa, boolean empty){// esse metodo é chamado toda vez que precisa atualizar a lista alterando algum item
+            protected void updateItem(Tarefa tarefa, boolean empty){// esse metodo é chamado toda vez que precisar criar ou editar uma celula
                 super.updateItem(tarefa, empty);// chama o metodo original da classe ListCell para adicionar novos processos ao metodo
                 
                 if (empty || tarefa == null) { // verificar se a celular esta vazia ou se a tarefa esta vazia, nesses dois casos vai ser limpa automaticamente
@@ -75,14 +75,14 @@ public class MainController {
                 String prioridade = tarefa instanceof TarefaPrioritaria ? "[PRIORIDADE] " : "";// verifica se o objeto tarefa é tarefa prioritaria se for vai ter o texto Prioridade se nao fica sem nada
                 String status = tarefa.getConcluida() ? "Concluída" : "Pendente";//usando o metodo que eu criei no backend para verificar e mais na frente atribuir tambem
 
-                setText(prioridade + limparTitulo(tarefa.getTitulo()) + "\n" + tarefa.getDescricao() + "\nStatus: " + status);//Mostrar na celula como funciona
+                setText(prioridade + limparTitulo(tarefa.getTitulo()) + "\n" + tarefa.getDescricao() + "\nStatus: " + status);//Colocar o texto na celula
 
                 if (tarefa.getConcluida()) {
-                    setStyle("-fx-text-fill: #607d8b; -fx-background-color: #e8f5e9; -fx-padding: 10;");
+                    setStyle("-fx-text-fill: #607d8b; -fx-background-color: #e8f5e9; -fx-padding: 10;");// se a tarefa estiver concluida muda a cor da tarefa
                 } else if (tarefa instanceof TarefaPrioritaria) {
-                    setStyle("-fx-text-fill: #263238; -fx-background-color: #fff3e0; -fx-padding: 10;");
+                    setStyle("-fx-text-fill: #263238; -fx-background-color: #fff3e0; -fx-padding: 10;");// se a tarefa for uma tarefa prioritaria
                 } else {
-                    setStyle("-fx-text-fill: #263238; -fx-padding: 10;");
+                    setStyle("-fx-text-fill: #263238; -fx-padding: 10;");//  tarefa normal
                 }
             }
             
@@ -93,17 +93,17 @@ public class MainController {
     
     @FXML
     private void adicionar() {
-        editaTarefa = null;
-        labelCriaTarefa.setText("Nova tarefa");
-        limparCriaTarefa();
-        mostrarAbaCriaTarefa(true);
+        editaTarefa = null;// determina que o usuario nao esta editando nenhuma tarefa, para que quando o metodo salvar for usado ele cria uma tarefa nova
+        labelCriaTarefa.setText("Nova tarefa");// um texto que fica acima dos campos
+        limparCriaTarefa();// serve para limpar os campos e o checkbox
+        mostrarAbaCriaTarefa(true);// mostra a aba para o usuario criar a tarefa
         campoTitulo.requestFocus();// ao clicar em editar ou adicionar tarefa ele ja joga na no textfield campoTitulo para o usuario digitar primeiro o titulo
         
     }
     @FXML
     private void salvar(){
-        String titulo = campoTitulo.getText().trim();
-        String descricao = campoDescricao.getText().trim();
+        String titulo = campoTitulo.getText().trim();// captura o que foi digitado do campoTitulo
+        String descricao = campoDescricao.getText().trim();// captura o que foi digitado do campoDescricao
 
         if (titulo.isBlank()) {// verificar se o titulo esta vazio
             mostrarAviso("Título obrigatório", "Digite um título para a tarefa.");
@@ -114,77 +114,83 @@ public class MainController {
             descricao = "Sem descrição";
         }
 
-        if (editaTarefa == null) {
+        if (editaTarefa == null) {// verifica se ele nao esta editando, se nao estiver editando, ele cria uma tarefa e se estiver atualizaTarefa
             criarTarefa(titulo, descricao);
         } else {
             atualizarTarefa(titulo, descricao);
         }
 
-        atualizarLista();
+        atualizarLista();// atualiza lista
         limparCriaTarefa();
         mostrarAbaCriaTarefa(false);
     }
     @FXML
     private void editar() {
-        Tarefa selecionada = listaTarefas.getSelectionModel().getSelectedItem();// o ListView ja vem com o recurso de selecao entao por isso eu so chamei o metodo
-        // getSelectionModel:
-        // getSelectedItem:
+        Tarefa selecionada = listaTarefas.getSelectionModel().getSelectedItem();// eu busquei uma tarefa que esta selecionada dentro do ListView e atribui a Tarefa selecionada para funcionar como referencia
+        // o ListView ja vem com o recurso de selecao entao por isso eu so chamei o metodo
+        // SelectionModel é um objeto interno do ListView, ele controla qual item esta selecionado pelo indice e tambem selecao de mais de uma opcao
+        // getSelectionModel: retorna o controlador da lista que vai usar o metodo getSelectedItem para buscar o atual item selecionado
         
-        if (selecionada == null) {
+        // getSelectedItem:retorna o item selecionado no momento
+        
+        if (selecionada == null) {// se o controlador disser que nao selecinou nada, ele avisa o usuario
             mostrarAviso("Nenhuma tarefa selecionada", "Selecione uma tarefa para editar.");
             return;
         }
 
-        editaTarefa = selecionada;
-        labelCriaTarefa.setText("Editar tarefa");
-        campoTitulo.setText(limparTitulo(selecionada.getTitulo()));
-        campoDescricao.setText(selecionada.getDescricao());
-        checkPrioritaria.setSelected(selecionada instanceof TarefaPrioritaria);
-        mostrarAbaCriaTarefa(true);
-        campoTitulo.requestFocus();
+        editaTarefa = selecionada; // referenciei de novo porque eu tinha que fazer a verificacao acima
+        labelCriaTarefa.setText("Editar tarefa");// titulo da aba
+        campoTitulo.setText(limparTitulo(selecionada.getTitulo()));// repassei o titulo da tarefa para a aba de edicao
+        campoDescricao.setText(selecionada.getDescricao());// repassei a descricao da tarefa para a aba de edicao
+        checkPrioritaria.setSelected(selecionada instanceof TarefaPrioritaria);// repassei o que tinha sido marcado no checkbox antes
+        mostrarAbaCriaTarefa(true);// agora sim posso mostrar a aba
+        campoTitulo.requestFocus();// ja deixo selecionada o campoTitulo
         
     }
     @FXML
     private void concluir() {
-        int indiceSelecionado = listaTarefas.getSelectionModel().getSelectedIndex();
+        int indiceSelecionado = listaTarefas.getSelectionModel().getSelectedIndex();// ele buscou o indice do ListView porque apartir dele que vou concluir a tarefa
 
-        if (indiceSelecionado < 0) {
+        if (indiceSelecionado < 0) {// ListView determina que quando nao tem nada selecionado o valor correspondente em indice é -1
             mostrarAviso("Nenhuma tarefa selecionada", "Selecione uma tarefa para concluir.");
             return;
         }
 
-        gerenciador.concluirTarefa(tarefas, tarefasPrio, indiceSelecionado + 1);
+        gerenciador.concluirTarefa(tarefas, tarefasPrio, indiceSelecionado + 1);// o metodo que eu criei no backend
         atualizarLista();
     }
     @FXML
     private void remover(){
-        int indiceSelecionado = listaTarefas.getSelectionModel().getSelectedIndex();
-        Tarefa selecionada = listaTarefas.getSelectionModel().getSelectedItem();
+        int indiceSelecionado = listaTarefas.getSelectionModel().getSelectedIndex();// pegou o indice da tarefa selecionada
+        Tarefa selecionada = listaTarefas.getSelectionModel().getSelectedItem();// referenciou a propria tarefa selecionada
 
-        if (selecionada == null) {
+        if (selecionada == null) {// quando nenhuma tarefa foi selecionada selecionada fica vazia, afinal ela é uma referencia
             mostrarAviso("Nenhuma tarefa selecionada", "Selecione uma tarefa para remover.");
             return;
         }
 
-        Alert confirmacao = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmacao.setTitle("Confirmar remoção");
-        confirmacao.setHeaderText("Remover tarefa");
-        confirmacao.setContentText("Deseja remover: " + limparTitulo(selecionada.getTitulo()) + "?");
+        Alert confirmacao = new Alert(Alert.AlertType.CONFIRMATION);// criar um aviso rapido para confirmar a remocao
+        confirmacao.setTitle("Confirmar remoção");// titulo do aviso
+        confirmacao.setHeaderText("Remover tarefa");// cabecalho do aviso
+        confirmacao.setContentText("Deseja remover: " + limparTitulo(selecionada.getTitulo()) + "?");// o texto contido no aviso
 
-        if (confirmacao.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-            gerenciador.removerTarefa(tarefas, tarefasPrio, indiceSelecionado + 1);
+        if (confirmacao.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {// chama o metodo do objeto alert, showAndWait(): serve para mostrar a janela e para o codigo ate o usuario responder
+            // esse metodo showAndWait ele retorna a resposta do usuario
+            // orElse(): é no caso de nao existir um valor selecionado, ai quando isso acontece ele marca como buttonType.Cancel ai ele compara com o ButtonType.OK
+            
+            gerenciador.removerTarefa(tarefas, tarefasPrio, indiceSelecionado + 1);// chama o metodo do gerenciador para remover
             atualizarLista();
         }
     }
     
     @FXML
     private void cancelar(){
-        limparCriaTarefa();
-        mostrarAbaCriaTarefa(false);
+        limparCriaTarefa();// limpar todas os campos e o checkbox
+        mostrarAbaCriaTarefa(false);// fecha a aba de adicionar ou editar tarefa
     }
     
     private void criarTarefa(String titulo, String descricao) {
-        if (checkPrioritaria.isSelected()) {
+        if (checkPrioritaria.isSelected()) {// se essa checkbox estiver selecionada
             gerenciador.adicionarTarefaPrioritaria(tarefasPrio, new TarefaPrioritaria(titulo, descricao));
         } else {
             gerenciador.adicionarTarefa(tarefas, new Tarefa(titulo, descricao));
@@ -192,27 +198,28 @@ public class MainController {
     }
     
     private void atualizarTarefa(String titulo, String descricao) {
+        
+        // Primeiro eu pego tudo do editaTarefa para eu depois limpar ele e usar o que eu peguei dele para colocar em outra tarefa
         boolean eraPrioritaria = editaTarefa instanceof TarefaPrioritaria;
         boolean deveSerPrioritaria = checkPrioritaria.isSelected();
         boolean estavaConcluida = editaTarefa.getConcluida();
 
-        removerPorReferencia(editaTarefa);
+        removerPorReferencia(editaTarefa);// tirei o editaTarefa da lista antes de colocar a nova versao
 
-        Tarefa novaTarefa = deveSerPrioritaria
-                ? new TarefaPrioritaria(titulo, descricao)
-                : new Tarefa(titulo, descricao);
+        Tarefa novaTarefa = deveSerPrioritaria ? new TarefaPrioritaria(titulo, descricao): new Tarefa(titulo, descricao);// cria uma nova tarefa
 
-        if (estavaConcluida) {
+        if (estavaConcluida) {// se a tarefa antiga estiver concluida, ele vai concluir a nova agora
             novaTarefa.concluir();
         }
 
-        if (deveSerPrioritaria) {
+        if (deveSerPrioritaria) {// para determinar em qual lista adicionar a tarefa
             tarefasPrio.adicionar((TarefaPrioritaria) novaTarefa);
         } else {
             tarefas.adicionar(novaTarefa);
         }
 
-        editaTarefa = null;
+        editaTarefa = null;// serve para apagar e quando o usuario for fazer o processo de criar uma nova tarefa, ele nao bugue o backend
+        // porque la no metodo salvar ele determina se vai criar ou atualizarTarefa
     }
     
     
@@ -233,7 +240,7 @@ public class MainController {
 
     }
 
-    @FXML
+    
     private void atualizarLista(){
         tarefasNaTela.clear();// limpa todas as tarefas para depois mostra-las de novo, vai ser usada no final do initialize para que depois dos ajustes seja atualizada a lista
         
@@ -250,22 +257,22 @@ public class MainController {
 
     
     
-    @FXML
+    
     private void mostrarAbaCriaTarefa(boolean mostrar){
-        labelCriaTarefa.setVisible(mostrar);
-        labelCriaTarefa.setManaged(mostrar);
+        criaTarefa.setVisible(mostrar);// torna o layout visivel
+        criaTarefa.setManaged(mostrar);// determina se o layout ocupa espaco na tela ou se ele fica so misturado com os outros componentes
         
     }
     
-    @FXML
+    
     private void limparCriaTarefa(){
         campoTitulo.clear();
         campoDescricao.clear();
         checkPrioritaria.setSelected(false);
-        editaTarefa = null;
+        editaTarefa = null;// 
     }
     
-    @FXML
+    
     private void mostrarAviso(String titulo, String mensagem) {
         Alert alert = new Alert(Alert.AlertType.WARNING);// esse Alert cria uma aba para avisar sobre algo, é um metodo ate que bem generico
         alert.setTitle(titulo);
@@ -274,7 +281,7 @@ public class MainController {
         alert.showAndWait();
     }
     
-    @FXML
+    
     private String limparTitulo(String titulo){
         return titulo.replace(" | PRIORIDADE ", "").replace(" | TÍTULO: ", "").trim();
     }
