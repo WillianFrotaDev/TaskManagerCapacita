@@ -107,6 +107,7 @@ public class TarefaDAO {
                 String titulo = resultadoConsulta.getString("titulo");
                 String descricao = resultadoConsulta.getString("descricao");
                 boolean prioritaria = resultadoConsulta.getBoolean("prioritaria");
+                boolean concluida = resultadoConsulta.getBoolean("concluida");
 
                 
                 Tarefa tarefa;
@@ -116,17 +117,25 @@ public class TarefaDAO {
                 } else {
                     tarefa = new Tarefa(titulo, descricao);
                 }
-
+                
+                if(concluida){
+                    tarefa.concluir();
+                }
+                
                 tarefa.setId(id);
-
+                resultadoConsulta.close();
                 return tarefa;
+                
             }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-
-    return null;
-
+        } catch (SQLException e) {
+            e.printStackTrace();
+            }
+    conexao.close();
+    state.close();
+    
+    
+    return null;// se ele nao encontrar ele retorna null
+    
         
     }
     
@@ -163,7 +172,7 @@ public class TarefaDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        
     }
     
     public void remover(int id) {

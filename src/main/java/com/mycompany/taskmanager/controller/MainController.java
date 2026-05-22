@@ -4,6 +4,7 @@
  */
 package com.mycompany.taskmanager.controller;
 
+import com.mycompany.taskmanager.dao.TarefaDAO;
 import com.mycompany.taskmanager.model.Tarefa;
 import com.mycompany.taskmanager.model.TarefaPrioritaria;
 import javafx.collections.FXCollections;
@@ -35,7 +36,7 @@ public class MainController {
     private CheckBox checkPrioritaria;// uma checkbox para determinar se a tarefa a ser editada ou criada é tarefa normal ou se é tarefa prioritaria
     
     @FXML
-    private VBox criaTarefa;// area que vai aparecer na hora de editar ou criar uma tarefa é nela que vai ter todos os componentes acima
+    private VBox criaTarefa;// area que vai aparecer na hora de editar ou criar uma tarefa é nela que vai ter todos os componentes que estao acima
     
     @FXML 
     private Label labelCriaTarefa;// nele vai dizer se voce esta editando uma tarefa ou adicionando uma tarefa
@@ -49,6 +50,8 @@ public class MainController {
     private final ListaDeTarefas<TarefaPrioritaria> tarefasPrio = new ListaDeTarefas<>();// guarda no backend as tarefas prioritarias
     private final ListaDeTarefas<Tarefa> tarefas = new ListaDeTarefas<>();// guarda no back end as tarefas normais
     private final TaskManager gerenciador = new TaskManager();// gerencia as duas listas de cima
+    
+    private final TarefaDAO tarefaDAO = new TarefaDAO();
     private final ObservableList<Tarefa> tarefasNaTela = FXCollections.observableArrayList();// essa é a lista que alimenta o ListView listaTarefas
     
     private Tarefa editaTarefa;// guarda uma tarefa que vai ser editada no momento
@@ -64,7 +67,7 @@ public class MainController {
             protected void updateItem(Tarefa tarefa, boolean empty){// esse metodo é chamado toda vez que precisar criar ou editar uma celula
                 super.updateItem(tarefa, empty);// chama o metodo original da classe ListCell para adicionar novos processos ao metodo
                 
-                if (empty || tarefa == null) { // verificar se a celular esta vazia ou se a tarefa esta vazia, nesses dois casos vai ser limpa automaticamente
+                if (empty || tarefa == null) { // verificar se a celula esta vazia ou se a tarefa esta vazia, nesses dois casos vai ser limpa automaticamente
                     // esse processo acontece porque o ListView pode criar celulas extras invisiveis ou reutilizar celulas antigas
                     
                     setText(null);// limpar o texto da celula
