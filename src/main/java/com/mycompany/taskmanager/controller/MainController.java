@@ -54,7 +54,7 @@ public class MainController {
     private final ListaDeTarefas<Tarefa> tarefas = new ListaDeTarefas<>();// guarda no back end as tarefas normais
     private final TaskManager gerenciador = new TaskManager();// gerencia as duas listas de cima
     
-    private final TarefaDAO tarefaDAO = new TarefaDAO();
+    
     private final ObservableList<Tarefa> tarefasNaTela = FXCollections.observableArrayList();// essa é a lista que alimenta o ListView listaTarefas
     
     private Tarefa editaTarefa;// guarda uma tarefa que vai ser editada no momento
@@ -119,7 +119,7 @@ public class MainController {
         if (descricao.isBlank()) {// verifica se esta sem descricao, se estiver ele determina a descricao como "Sem descricao"
             descricao = "Sem descrição";
         }
-
+        try{
         if (editaTarefa == null) {// verifica se ele nao esta editando, se nao estiver editando, ele cria uma tarefa e se estiver atualizaTarefa
             criarTarefa(titulo, descricao);
         } else {
@@ -129,6 +129,10 @@ public class MainController {
         atualizarLista();// atualiza lista
         limparCriaTarefa();
         mostrarAbaCriaTarefa(false);
+        } catch(SQLException e){
+            mostrarAviso("Erro no banco de dados", "Não foi possivel salvar a tarefa");
+            e.printStackTrace();
+        }
     }
     @FXML
     private void editar() {
@@ -199,14 +203,17 @@ public class MainController {
         mostrarAbaCriaTarefa(false);// fecha a aba de adicionar ou editar tarefa
     }
     
-    private void criarTarefa(String titulo, String descricao) {
+    private void criarTarefa(String titulo, String descricao) throws SQLException {
+        Tarefa novaTarefa;
         if (checkPrioritaria.isSelected()) {// se essa checkbox estiver selecionada
             //gerenciador.adicionarTarefaPrioritaria(tarefasPrio, new TarefaPrioritaria(titulo, descricao));
-            tarefaDao.salvar(new TarefaPrioritaria(titulo, descricao));
+            novaTarefa = new TarefaPrioritaria(titulo, descricao);
         } else {
             //gerenciador.adicionarTarefa(tarefas, new Tarefa(titulo, descricao));
-            tarefaDao.salvar(new Tarefa(titulo, descricao));
+            novaTarefa = new Tarefa(titulo, descricao);
         }
+        tarefaDao.salvar(novaTarefa);
+        atualizarLista();
     }
     
     private void atualizarTarefa(String titulo, String descricao) {

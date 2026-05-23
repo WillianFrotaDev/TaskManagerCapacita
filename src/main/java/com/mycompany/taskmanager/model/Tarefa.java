@@ -21,7 +21,7 @@ public class Tarefa {
         this.concluido = false;
     }
     public String getTitulo(){
-        return "| TÍTULO: " + titulo;
+        return titulo;
     }
     public void setTitulo(String titulo){
         this.titulo = titulo;
