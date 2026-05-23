@@ -155,22 +155,22 @@ public class MainController {
     }
     @FXML
     private void concluir() throws SQLException {
-        int indiceSelecionado = listaTarefas.getSelectionModel().getSelectedIndex();// ele buscou o indice do ListView porque apartir dele que vou concluir a tarefa
+        Tarefa tarefaSelecionada = listaTarefas.getSelectionModel().getSelectedItem();// ele buscou o indice do ListView porque apartir dele que vou concluir a tarefa
 
-        if (indiceSelecionado < 0) {// ListView determina que quando nao tem nada selecionado o valor correspondente em indice é -1
+        if (tarefaSelecionada == null) {// ListView determina que quando nao tem nada selecionado o valor correspondente em indice é -1
             mostrarAviso("Nenhuma tarefa selecionada", "Selecione uma tarefa para concluir.");
             return;
         }
 
         //gerenciador.concluirTarefa(tarefas, tarefasPrio, indiceSelecionado + 1);// o metodo que eu criei no backend
-        Tarefa tarefinha = tarefaDao.buscarPorId(indiceSelecionado);
-        tarefinha.concluir();
-        tarefaDao.editar(tarefinha);
+        
+        tarefaSelecionada.concluir();
+        tarefaDao.editar(tarefaSelecionada);
         atualizarLista();
     }
     @FXML
     private void remover() throws SQLException{
-        int indiceSelecionado = listaTarefas.getSelectionModel().getSelectedIndex();// pegou o indice da tarefa selecionada
+        
         Tarefa selecionada = listaTarefas.getSelectionModel().getSelectedItem();// referenciou a propria tarefa selecionada
 
         if (selecionada == null) {// quando nenhuma tarefa foi selecionada selecionada fica vazia, afinal ela é uma referencia
@@ -188,7 +188,7 @@ public class MainController {
             // orElse(): é no caso de nao existir um valor selecionado, ai quando isso acontece ele marca como buttonType.Cancel ai ele compara com o ButtonType.OK
             
             //gerenciador.removerTarefa(tarefas, tarefasPrio, indiceSelecionado + 1);// chama o metodo do gerenciador para remover
-            tarefaDao.remover(indiceSelecionado);
+            tarefaDao.remover(selecionada.getId());
             atualizarLista();
         }
     }
@@ -215,6 +215,7 @@ public class MainController {
         //boolean eraPrioritaria = editaTarefa instanceof TarefaPrioritaria;
         boolean deveSerPrioritaria = checkPrioritaria.isSelected();
         boolean estavaConcluida = editaTarefa.getConcluida();
+        
 
         //removerPorReferencia(editaTarefa);// tirei o editaTarefa da lista antes de colocar a nova versao
 
@@ -232,7 +233,7 @@ public class MainController {
         } else {
             //tarefas.adicionar(novaTarefa);
         }*/
-        
+        novaTarefa.setId(editaTarefa.getId());
         tarefaDao.editar(novaTarefa);
 
         editaTarefa = null;// serve para apagar e quando o usuario for fazer o processo de criar uma nova tarefa, ele nao bugue o backend
@@ -262,8 +263,7 @@ public class MainController {
         tarefasNaTela.clear();// limpa todas as tarefas para depois mostra-las de novo, vai ser usada no final do initialize para que depois dos ajustes seja atualizada a lista
         ListaDeTarefas<Tarefa> listinhaTare = tarefaDao.listar();
         for (int i = 0; i < listinhaTare.tamanhoLista(); i++) {// adiciona logo as tarefas prioritarias primeiro para depois adicionar as tarefas normais
-            Tarefa tarefinha = tarefaDao.buscarPorId(i + 1);
-            tarefasNaTela.add(tarefinha);
+            tarefasNaTela.add(listinhaTare.obter(i));
         }
         /*for (int i = 0; i < listinhaTare.tamanhoLista(); i++){// adiciona as tarefas normais
             Tarefa tarefinha

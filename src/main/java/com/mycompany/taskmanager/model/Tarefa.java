@@ -38,6 +38,7 @@ public class Tarefa {
     public boolean getPrioridade(){
         return false;
     }
+    
     public boolean concluir(){ // uma parada que eu nao sabia quando é um metodo booleano precisa returnar true ou false
         if(this.concluido){
             return false;

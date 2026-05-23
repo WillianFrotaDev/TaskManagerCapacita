@@ -24,7 +24,10 @@ public class TarefaDAO {
     public ListaDeTarefas<Tarefa> listar() throws SQLException{
         
         ListaDeTarefas<Tarefa> listinha = new ListaDeTarefas<>();
-        String sql = "SELECT * FROM tarefas";
+        String sql = """
+                     SELECT * FROM tarefas
+                     ORDER BY prioritaria DESC
+                     """;
         try{
             
             Connection conexao = ConexaoFactory.conectar();
@@ -42,7 +45,7 @@ public class TarefaDAO {
                 Tarefa tarefa;
                 
                 if (prioritaria) {
-                tarefa = new TarefaPrioritaria(titulo, descricao);
+                    tarefa = new TarefaPrioritaria(titulo, descricao);
                 } else {
                     tarefa = new Tarefa(titulo, descricao);
                 }
@@ -65,7 +68,7 @@ public class TarefaDAO {
         return listinha;
     }
     
-    public void salvar(Tarefa tarefa){
+    public <T extends Tarefa> void salvar(T tarefa){
         
         String sql = "INSERT INTO tarefas (titulo, descricao, concluida, prioritaria) VALUES (?, ?, ?, ?)";
         try{
@@ -80,7 +83,7 @@ public class TarefaDAO {
            
            //executeUpdate: altera dados
            //executeQuery: busca dados
-           stm.executeUpdate();// ele é usado para operacoes em sql, usado nas operacoes INSERT, UPDATE e DELETE, 
+           stm.executeUpdate();// ele é usado para operacoes em sql, usado nas operacoes INSERT, UPDATE e DELETE, Ele tambem pode retornar um valor inteiro de linhas alteradas quando atribuido a uma variavel inteira
            //tambem usado na criacao de tabelas (CREATE TABLE) e em alteracoes estruturais (ALTER TABLE)
             
            conexao.close();
