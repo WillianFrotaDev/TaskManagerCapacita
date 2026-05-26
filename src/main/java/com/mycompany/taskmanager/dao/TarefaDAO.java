@@ -27,12 +27,15 @@ public class TarefaDAO {
         String sql = """
                      SELECT * FROM tarefas
                      ORDER BY prioritaria DESC
-                     """;
+                     """;// isso serve para ordenar as tarefas sendo as prioritarias primeiro
+        Connection conexao = null;
+        PreparedStatement stm = null;
+        ResultSet resultadoConsulta = null;
         try{
             
-            Connection conexao = ConexaoFactory.conectar();
-            PreparedStatement stm = conexao.prepareStatement(sql);// preparou o comando
-            ResultSet resultadoConsulta = stm.executeQuery();// serve para pegar o resultado da consulta ao banco de dados
+            conexao = ConexaoFactory.conectar();
+            stm = conexao.prepareStatement(sql);// preparou o comando
+            resultadoConsulta = stm.executeQuery();// serve para pegar o resultado da consulta ao banco de dados
             
              while (resultadoConsulta.next()) {
 
@@ -59,11 +62,25 @@ public class TarefaDAO {
             listinha.adicionar(tarefa);
         }
             
-            resultadoConsulta.close();
-            conexao.close();
-            stm.close();
+            
         } catch(SQLException e){
             e.printStackTrace();
+        } finally{
+            try{
+                if(resultadoConsulta != null){
+                    resultadoConsulta.close();
+                }
+                if(stm != null){
+                    stm.close();
+                }
+                if(conexao != null){
+                    conexao.close();
+                }
+            } catch(SQLException erroClose){
+                    erroClose.printStackTrace();
+            }
+            
+            
         }
         return listinha;
     }
@@ -213,9 +230,10 @@ public class TarefaDAO {
 
             stmt.setInt(5, tarefa.getId());
             
-            conexao.commit();
+            
             int linhasAfetadas = stmt.executeUpdate();
-
+            conexao.commit();
+            
             if (linhasAfetadas > 0) {
                 System.out.println("Tarefa editada com sucesso!");
             } else {
@@ -223,7 +241,14 @@ public class TarefaDAO {
             }
 
         } catch (SQLException e) {
-            conexao.rollback();
+            try{
+                if(conexao != null){
+                    conexao.rollback();
+                    
+                }
+            } catch(SQLException erroRoll){
+                erroRoll.printStackTrace();
+            }
             e.printStackTrace();
         } finally {
             try{
@@ -246,17 +271,20 @@ public class TarefaDAO {
 
         //vou primeiro usar o metodo buscarPorId para depois pegar e executar esse
         String sql = "DELETE FROM tarefas WHERE id = ?";
-
-        try (// try with resources para fechar automaticamente o connection e o prepared statement
-            Connection conexao = ConexaoFactory.conectar();
-            PreparedStatement stmt = conexao.prepareStatement(sql)
-        ) {
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        try{// try with resources para fechar automaticamente o connection e o prepared statement
+            conexao = ConexaoFactory.conectar();
+            conexao.setAutoCommit(false);
+            stmt = conexao.prepareStatement(sql);
+         
 
             stmt.setInt(1, id);// esse metodo serve para setar o valor "?"
-
+            
             int linhasAfetadas = stmt.executeUpdate();// quando se altera dados é executeUpdate, é
             // o executeUpdate sempre retorna o numero de linhas afetadas pela alteracao que voce fez no banco de dados
-
+            conexao.commit();
+            
             if (linhasAfetadas > 0) {
                 System.out.println("Tarefa removida com sucesso!");
                 
@@ -266,7 +294,26 @@ public class TarefaDAO {
             }
 
         } catch (SQLException e) {
+            try{
+                if(conexao != null){
+                    conexao.rollback();
+                }
+            } catch(SQLException erroRoll){
+                erroRoll.printStackTrace();
+            }
             e.printStackTrace();
+        } finally{
+            try{
+                if(stmt != null){
+                    stmt.close();
+                }
+                if(conexao != null){
+                    conexao.close();
+                }
+                
+            } catch(SQLException erroCLose){
+                erroCLose.printStackTrace();
+            }
         }
     
     }
