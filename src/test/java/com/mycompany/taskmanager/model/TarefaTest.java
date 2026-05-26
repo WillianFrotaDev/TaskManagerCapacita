@@ -4,10 +4,19 @@
  */
 package com.mycompany.taskmanager.model;
 
+import org.junit.jupiter.api.Test;
 /**
  *
  * @author willianfrota
  */
 public class TarefaTest {
+    @Test
+    void deveCriarTarefaComTituloEDescricao() {
+        Tarefa tarefa = new Tarefa("Estudar Java", "Estudar JUnit");
+
+        assertEquals("Estudar Java", tarefa.getTitulo());
+        assertEquals("Estudar JUnit", tarefa.getDescricao());
+        assertFalse(tarefa.getConcluida());
+    }
     
 }
