@@ -68,13 +68,20 @@ public class TarefaDAO {
         return listinha;
     }
     
-    public <T extends Tarefa> void salvar(T tarefa){
+    public <T extends Tarefa> void salvar(T tarefa) throws SQLException{
         
         String sql = "INSERT INTO tarefas (titulo, descricao, concluida, prioritaria) VALUES (?, ?, ?, ?)";
+        
+        Connection conexao = null; 
+        PreparedStatement stm = null;
+        
+        
         try{
-           Connection conexao = ConexaoFactory.conectar(); 
-           PreparedStatement stm = conexao.prepareStatement(sql);// PreparedStatement serve para executar comandos SQL no banco de dados
+           conexao = ConexaoFactory.conectar();
            
+           conexao.setAutoCommit(false);
+           
+           stm = conexao.prepareStatement(sql);// PreparedStatement serve para executar comandos SQL no banco de dados
            // isso representa a ordem de cada um dos elementos associado a string sql la de cima
            stm.setString(1, tarefa.getTitulo());
            stm.setString(2, tarefa.getDescricao());
@@ -85,11 +92,29 @@ public class TarefaDAO {
            //executeQuery: busca dados
            stm.executeUpdate();// ele é usado para operacoes em sql, usado nas operacoes INSERT, UPDATE e DELETE, Ele tambem pode retornar um valor inteiro de linhas alteradas quando atribuido a uma variavel inteira
            //tambem usado na criacao de tabelas (CREATE TABLE) e em alteracoes estruturais (ALTER TABLE)
-            
-           conexao.close();
-           stm.close();
+           
+           conexao.commit();
+           
+           
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                if(conexao != null){
+                    conexao.rollback();
+                }
+            } catch(SQLException erroRollback){
+                erroRollback.printStackTrace();
+            }
+        } finally{// esse finally roda independente se tiver dado erro ou nao, por isso que eu coloquei tambem o SQLException pois pode ser que ele tambem der erradoã
+            try{
+                if(stm != null){
+                    stm.close();
+                }
+                if(conexao != null){
+                    conexao.close();
+                }
+            } catch(SQLException e){
+                e.printStackTrace();
+            }    
         }
 
     }
@@ -97,12 +122,15 @@ public class TarefaDAO {
     public Tarefa buscarPorId(int id) throws SQLException{
         
         String sql = "SELECT * FROM tarefas WHERE id = ?";
-        Connection conexao = ConexaoFactory.conectar();
-        PreparedStatement state = conexao.prepareStatement(sql);
+        Connection conexao = null;
+        PreparedStatement state = null;
+        ResultSet resultadoConsulta = null;
         
         try{
+            conexao = ConexaoFactory.conectar();
+            state = conexao.prepareStatement(sql);
             state.setInt(1, id);
-            ResultSet resultadoConsulta = state.executeQuery();// executeQuery serve para consultar os dados
+            resultadoConsulta = state.executeQuery();// executeQuery serve para consultar os dados
         
             if (resultadoConsulta.next()) {
 
@@ -132,28 +160,49 @@ public class TarefaDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            }
-    conexao.close();
-    state.close();
+            } finally{
+                try{
+                    if(resultadoConsulta != null){
+                        resultadoConsulta.close();
+                    }
+                    if(state != null){
+                        state.close();
+                    }
+                    if(conexao != null){
+                        conexao.close();
+                    }
+                } catch(SQLException erroClose){
+                    erroClose.printStackTrace();
+                }
+        }
+        
     
     
-    return null;// se ele nao encontrar ele retorna null
+    
+        return null;// se ele nao encontrar ele retorna null
     
         
     }
     
-    public void editar(Tarefa tarefa){
+    public void editar(Tarefa tarefa) throws SQLException{
         
         // vou usar junto com buscarPorId
         String sql = """
         UPDATE tarefas
         SET titulo = ?, descricao = ?, concluida = ?, prioritaria = ?
         WHERE id = ?""";
-
-        try (
-            Connection conexao = ConexaoFactory.conectar();
-            PreparedStatement stmt = conexao.prepareStatement(sql)
-        ) {
+        
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        try{ 
+            
+            
+            conexao = ConexaoFactory.conectar();
+            
+            conexao.setAutoCommit(false);
+            
+            stmt = conexao.prepareStatement(sql);
+         
 
             stmt.setString(1, tarefa.getTitulo());
             stmt.setString(2, tarefa.getDescricao());
@@ -163,7 +212,8 @@ public class TarefaDAO {
             stmt.setBoolean(4, tarefa instanceof TarefaPrioritaria);
 
             stmt.setInt(5, tarefa.getId());
-
+            
+            conexao.commit();
             int linhasAfetadas = stmt.executeUpdate();
 
             if (linhasAfetadas > 0) {
@@ -173,7 +223,21 @@ public class TarefaDAO {
             }
 
         } catch (SQLException e) {
+            conexao.rollback();
             e.printStackTrace();
+        } finally {
+            try{
+                if(stmt != null){
+                    stmt.close();
+                }
+                if(conexao != null){
+                    conexao.close();
+                } 
+            } catch(SQLException erroCls){
+                
+                erroCls.printStackTrace();
+                
+            }
         }
         
     }
