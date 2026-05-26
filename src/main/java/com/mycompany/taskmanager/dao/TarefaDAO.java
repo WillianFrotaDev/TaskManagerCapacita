@@ -20,6 +20,11 @@ import java.sql.ResultSet;
  */
 public class TarefaDAO {
     
+    private final Connection conexao;
+    public TarefaDAO(Connection conexao){
+        this.conexao = conexao;
+    }
+    
     
     public ListaDeTarefas<Tarefa> listar() throws SQLException{
         
@@ -201,7 +206,7 @@ public class TarefaDAO {
         
     }
     
-    public void editar(Tarefa tarefa) throws SQLException{
+    public void editar(Tarefa tarefa) {
         
         // vou usar junto com buscarPorId
         String sql = """

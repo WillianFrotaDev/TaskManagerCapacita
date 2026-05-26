@@ -21,6 +21,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+
+import com.mycompany.taskmanager.db.ConexaoFactory;
+import java.sql.Connection;
 /**
  *
  * @author willianfrota
@@ -48,7 +51,9 @@ public class MainController {
     @FXML
     private Label labelCriaGeral;// todo o texto que tera em cada espaco de tarefa na lista de tarefas
     
-    private final TarefaDAO tarefaDao = new TarefaDAO();// vai integrar com o banco de dados
+    
+    private TarefaDAO tarefaDao;// vai integrar com o banco de dados
+    private Connection conexao;// tive que criar uma conexao para conseguir fazer testes no SQLite
     
     private final ListaDeTarefas<TarefaPrioritaria> tarefasPrio = new ListaDeTarefas<>();// guarda no backend as tarefas prioritarias
     private final ListaDeTarefas<Tarefa> tarefas = new ListaDeTarefas<>();// guarda no back end as tarefas normais
@@ -60,7 +65,20 @@ public class MainController {
     private Tarefa editaTarefa;// guarda uma tarefa que vai ser editada no momento
     
     @FXML
-    private void initialize() throws SQLException{ // esse metodo so roda uma vez, quando é feito alguma alteracao quem atualiza a lista é atualizarLista
+    private void initialize() { // esse metodo so roda uma vez, quando é feito alguma alteracao quem atualiza a lista é atualizarLista
+        
+        try {
+
+            conexao = ConexaoFactory.conectar();
+
+            tarefaDao = new TarefaDAO(conexao);
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+            mostrarAviso( "Erro no banco de dados", "Não foi possível conectar ao banco.");
+        }
         
         listaTarefas.setItems(tarefasNaTela);// serve para conectar o Observable list com o ListView
         

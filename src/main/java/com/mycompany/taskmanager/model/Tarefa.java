@@ -16,6 +16,10 @@ public class Tarefa {
     private boolean concluido;
     
     public Tarefa(String titulo, String descricao){
+        if (titulo == null || titulo.isBlank()) {
+            throw new IllegalArgumentException("Título não pode ser vazio");
+        }
+        
         this.titulo = titulo;
         this.descricao = descricao;
         this.concluido = false;

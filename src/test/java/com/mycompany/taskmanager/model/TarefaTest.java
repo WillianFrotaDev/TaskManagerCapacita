@@ -5,6 +5,8 @@
 package com.mycompany.taskmanager.model;
 
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 /**
  *
  * @author willianfrota
@@ -18,5 +20,18 @@ public class TarefaTest {
         assertEquals("Estudar JUnit", tarefa.getDescricao());
         assertFalse(tarefa.getConcluida());
     }
-    
+    @Test
+    void deveConcluirTarefa() {
+        Tarefa tarefa = new Tarefa("Estudar", "JUnit");
+
+        tarefa.concluir();
+
+        assertTrue(tarefa.getConcluida());
+    }
+    @Test
+    void naoDeveCriarTarefaComTituloVazio() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Tarefa("", "Descrição qualquer");
+        });
+    }
 }
