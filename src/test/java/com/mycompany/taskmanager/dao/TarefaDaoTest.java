@@ -5,9 +5,11 @@
 package com.mycompany.taskmanager.dao;
 
 import com.mycompany.taskmanager.model.Tarefa;
+import com.mycompany.taskmanager.model.TarefaPrioritaria;
 import org.junit.jupiter.api.*;
 
 import java.sql.*;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,42 +22,61 @@ public class TarefaDaoTest {
     private TarefaDAO tarefaDao;
 
     @BeforeEach
-    void prepararBanco() throws SQLException {
+    void prepararBanco() throws SQLException {// cria o banco de dados com os recursos e id
         conexao = DriverManager.getConnection("jdbc:sqlite::memory:");
         tarefaDao = new TarefaDAO(conexao);
-
-        try (Statement stmt = conexao.createStatement()) {
-            stmt.execute("""
-                CREATE TABLE tarefas (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    titulo TEXT NOT NULL,
-                    descricao TEXT,
-                    concluida BOOLEAN,
-                    prioritaria BOOLEAN
-                )
-            """);
+        
+        String sql = """
+                    CREATE TABLE tarefas (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        titulo TEXT NOT NULL,
+                        descricao TEXT,
+                        concluida BOOLEAN,
+                        prioritaria BOOLEAN
+                    )
+                     """;
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.execute();// para criar o banco de dados
         }
     }
 
-    @AfterEach
+    @AfterEach // depois do teste tem que fechar a conexao
     void fecharConexao() throws SQLException {
         conexao.close();
     }
 
     @Test
     void deveSalvarTarefaNoBanco() throws SQLException {
-        Tarefa tarefa = new Tarefa("Estudar DAO", "Testar com SQLite");
+        Tarefa tarefa = new Tarefa("Testes com SQLite", "testar em outro banco de dados para nao dar problema");
 
         tarefaDao.salvar(tarefa);
+        String sql = "SELECT * FROM tarefas";
+        try (PreparedStatement stmt = conexao.prepareStatement(sql);
+             ResultSet resultadoSalvar = stmt.executeQuery()) {// pega o resultado da consulta
 
-        try (Statement stmt = conexao.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM tarefas")) {
+            assertTrue(resultadoSalvar.next());// move o cursor para a proxima linha e retorna true se essa linha existe ou false se nao existe
+            // vai servir para ver se foi criado alguma coisa no banco de dados, afinal o banco de dados eh novo e nao tem tarefas anteriores
+            assertEquals("Testes com SQLite", resultadoSalvar.getString("titulo"));// o teste so passa se
+            assertEquals("testar em outro banco de dados para nao dar problema", resultadoSalvar.getString("descricao"));
+            assertFalse(resultadoSalvar.getBoolean("concluida"));
+            assertFalse(resultadoSalvar.getBoolean("prioritaria"));
+        }
+    }
+    @Test
+    void deveSalvarTarefaPrioritariaNoBanco() throws SQLException{
+        
+        TarefaPrioritaria tarefaPrio = new TarefaPrioritaria("Salva Prio", "Tem que salvar");
+        tarefaDao.salvar(tarefaPrio);
+        
+        String sql = "SELECT * FROM tarefas";
+        try (PreparedStatement stmt = conexao.prepareStatement(sql);
+             ResultSet resultadoSalvar = stmt.executeQuery()) {// pega o resultado da consulta
 
-            assertTrue(rs.next());
-            assertEquals("Estudar DAO", rs.getString("titulo"));
-            assertEquals("Testar com SQLite", rs.getString("descricao"));
-            assertFalse(rs.getBoolean("concluida"));
-            assertFalse(rs.getBoolean("prioritaria"));
+            assertTrue(resultadoSalvar.next());// verifica se a tarefa foi criada
+            assertEquals("Testes com SQLite", resultadoSalvar.getString("titulo"));// o teste so passa se
+            assertEquals("testar em outro banco de dados para nao dar problema", resultadoSalvar.getString("descricao"));
+            assertFalse(resultadoSalvar.getBoolean("concluida"));
+            assertTrue(resultadoSalvar.getBoolean("prioritaria"));// tem que ser true, porque eh prioritaria
         }
     }
 }

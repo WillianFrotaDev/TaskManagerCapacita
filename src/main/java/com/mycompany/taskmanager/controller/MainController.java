@@ -86,7 +86,7 @@ public class MainController {
         listaTarefas.setItems(tarefasNaTela);// serve para conectar o Observable list com o ListView
         
         listaTarefas.setCellFactory(lista -> new ListCell<>(){// isso serve para configurar como cada tarefa aparece na lista, normalmente ListView funciona com o toString porem com esse ListCell da para editar cada cedula da lista
-            
+            // O Cellfactory serve para customizar o ListView sem ter que alterar o codigo fonte dele
             @Override
             protected void updateItem(Tarefa tarefa, boolean empty){// esse metodo é chamado toda vez que precisar criar ou editar uma celula
                 super.updateItem(tarefa, empty);// chama o metodo original da classe ListCell para adicionar novos processos ao metodo
@@ -104,10 +104,11 @@ public class MainController {
 
                 setText(prioridade + limparTitulo(tarefa.getTitulo()) + "\n" + tarefa.getDescricao() + "\nStatus: " + status);//Colocar o texto na celula
 
-                if (tarefa.getConcluida()) {
+                if (tarefa.getConcluida()) {//eu nao alterei o ListView, eu so restrigir algumas coisas dele implementando algumas coisas em especifico
                     setStyle("-fx-text-fill: #607d8b; -fx-background-color: #e8f5e9; -fx-padding: 10;");// se a tarefa estiver concluida muda a cor da tarefa
                 } else if (tarefa instanceof TarefaPrioritaria) {
-                    if(isSelected()){
+                    if(isSelected()){// isso serve para alterar a cor do tarefa quando selecionada e altera a cor do texto para conseguir diferenciar
+                        //
                         setStyle("""
                         -fx-background-color: -fx-selection-bar;
                         -fx-text-fill: white;
