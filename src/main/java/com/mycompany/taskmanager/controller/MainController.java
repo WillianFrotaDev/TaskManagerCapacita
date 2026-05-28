@@ -65,7 +65,7 @@ public class MainController {
     private Tarefa editaTarefa;// guarda uma tarefa que vai ser editada no momento
     
     @FXML
-    private void initialize() { // esse metodo so roda uma vez, quando é feito alguma alteracao quem atualiza a lista é atualizarLista
+    private void initialize() throws SQLException { // esse metodo so roda uma vez, quando é feito alguma alteracao quem atualiza a lista é atualizarLista
         
         try {
 
