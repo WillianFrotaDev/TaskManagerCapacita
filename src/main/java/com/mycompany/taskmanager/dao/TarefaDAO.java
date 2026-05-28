@@ -25,8 +25,10 @@ public class TarefaDAO {
         this.conexao = conexao;
     }
     
+    // tera metodos que seram acionados com o acionamento dos botoes do front end 
+    //tambem tera metodos que serao usados nos metodos que estao homologados com aos botoes
     
-    public ListaDeTarefas<Tarefa> listar() throws SQLException{
+    public ListaDeTarefas<Tarefa> listar() throws SQLException{// retorna a Lista para o ListView
         
         ListaDeTarefas<Tarefa> listinha = new ListaDeTarefas<>();
         String sql = """

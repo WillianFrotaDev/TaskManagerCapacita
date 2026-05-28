@@ -23,11 +23,11 @@ public class TarefaTest {
     private TarefaDAO tarefaDao;
 
     @BeforeEach
-    void prepararBanco() throws SQLException {
+    void prepararBanco() throws SQLException {// cria o banco de dados para fazer os testes
         conexao = DriverManager.getConnection("jdbc:sqlite::memory:");
         tarefaDao = new TarefaDAO(conexao);
 
-        try (Statement stmt = conexao.createStatement()) {
+        try (Statement stmt = conexao.createStatement()) {// 
             stmt.execute("""
                 CREATE TABLE tarefas (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,

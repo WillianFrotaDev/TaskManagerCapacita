@@ -51,12 +51,15 @@ public class MainController {
     @FXML
     private Label labelCriaGeral;// todo o texto que tera em cada espaco de tarefa na lista de tarefas
     
-    
+    // Essa eh a ligacacao do banco de dados com o frontend
     private TarefaDAO tarefaDao;// vai integrar com o banco de dados
     private Connection conexao;// tive que criar uma conexao para conseguir fazer testes no SQLite
+    //------
     
     private final ListaDeTarefas<TarefaPrioritaria> tarefasPrio = new ListaDeTarefas<>();// guarda no backend as tarefas prioritarias
     private final ListaDeTarefas<Tarefa> tarefas = new ListaDeTarefas<>();// guarda no back end as tarefas normais
+    
+    //Descontinuado
     private final TaskManager gerenciador = new TaskManager();// gerencia as duas listas de cima
     
     
@@ -104,7 +107,15 @@ public class MainController {
                 if (tarefa.getConcluida()) {
                     setStyle("-fx-text-fill: #607d8b; -fx-background-color: #e8f5e9; -fx-padding: 10;");// se a tarefa estiver concluida muda a cor da tarefa
                 } else if (tarefa instanceof TarefaPrioritaria) {
-                    setStyle("-fx-text-fill: #263238; -fx-background-color: #fff3e0; -fx-padding: 10;");// se a tarefa for uma tarefa prioritaria
+                    if(isSelected()){
+                        setStyle("""
+                        -fx-background-color: -fx-selection-bar;
+                        -fx-text-fill: white;
+                        -fx-padding: 10;
+                        """);// isso ja existe no ListView so que quando eu coloquei a cor bege, ela setou a cor bege para tudo ate mesmo quando esta selecionada
+                    } else{
+                        setStyle("-fx-text-fill: #263238; -fx-background-color: #fff3e0; -fx-padding: 10;");// se a tarefa for uma tarefa prioritaria
+                    }
                 } else {
                     setStyle("-fx-text-fill: #263238; -fx-padding: 10;");//  tarefa normal
                 }
