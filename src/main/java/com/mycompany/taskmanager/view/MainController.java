@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.taskmanager.controller;
+package com.mycompany.taskmanager.view;
 
+import com.mycompany.taskmanager.controller.ListaDeTarefas;
+import com.mycompany.taskmanager.controller.TaskManager;
 import com.mycompany.taskmanager.dao.TarefaDAO;
 import com.mycompany.taskmanager.model.Tarefa;
 import com.mycompany.taskmanager.model.TarefaPrioritaria;

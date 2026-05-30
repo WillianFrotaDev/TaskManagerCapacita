@@ -20,13 +20,13 @@ import java.sql.ResultSet;
  */
 public class TarefaDAO {
     
+    // eu criei essa conexao para poder usar nos testes
     private final Connection conexao;
-    public TarefaDAO(Connection conexao){
+    public TarefaDAO(Connection conexao){// ser usado nos testes, porque a conexao ao SQLite eh diferente do MYSQL
         this.conexao = conexao;
     }
     
-    // tera metodos que seram acionados com o acionamento dos botoes do front end 
-    //tambem tera metodos que serao usados nos metodos que estao homologados com aos botoes
+    
     
     public ListaDeTarefas<Tarefa> listar() throws SQLException{// retorna a Lista para o ListView
         
@@ -35,16 +35,20 @@ public class TarefaDAO {
                      SELECT * FROM tarefas
                      ORDER BY prioritaria DESC
                      """;// isso serve para ordenar as tarefas sendo as prioritarias primeiro
+        
+        //Foram instaciados como nulo para verificar no final se foram instaciados
         Connection conexao = null;
         PreparedStatement stm = null;
         ResultSet resultadoConsulta = null;
+        
         try{
             
             conexao = ConexaoFactory.conectar();
             stm = conexao.prepareStatement(sql);// preparou o comando
-            resultadoConsulta = stm.executeQuery();// serve para pegar o resultado da consulta ao banco de dados
+            resultadoConsulta = stm.executeQuery();// serviu executar e para pegar o resultado da consulta ao banco de dados
             
-             while (resultadoConsulta.next()) {
+             while (resultadoConsulta.next()) {// esse resultadoConsulta.next() devolve booleano, true quando tem alguma linha de resultado a frente e false quando nao tem
+                 //enquanto tiver linhas a frente ele se encaminha para a linha e retorna true, logo ele so sai desse loop quando nao tiver mais linhas
 
                 int id = resultadoConsulta.getInt("id");
                 String titulo = resultadoConsulta.getString("titulo");

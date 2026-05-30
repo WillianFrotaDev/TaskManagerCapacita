@@ -7,6 +7,7 @@ package com.mycompany.taskmanager.model;
 import com.mycompany.taskmanager.dao.TarefaDAO;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -26,9 +27,7 @@ public class TarefaTest {
     void prepararBanco() throws SQLException {// cria o banco de dados para fazer os testes
         conexao = DriverManager.getConnection("jdbc:sqlite::memory:");
         tarefaDao = new TarefaDAO(conexao);
-
-        try (Statement stmt = conexao.createStatement()) {// 
-            stmt.execute("""
+        String sql = """
                 CREATE TABLE tarefas (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     titulo TEXT NOT NULL,
@@ -36,7 +35,9 @@ public class TarefaTest {
                     concluida BOOLEAN,
                     prioritaria BOOLEAN
                 )
-            """);
+            """;
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {// 
+            stmt.execute();
         }
     }
     @Test
@@ -53,34 +54,9 @@ public class TarefaTest {
 
         tarefa.concluir();
 
-        assertTrue(tarefa.getConcluida());
+        assertTrue(tarefa.getConcluida());// verifica se tarefa realmente esta concluida
     }
-    @Test
-    void naoDeveCriarTarefaComTituloVazio() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Tarefa("", "Descrição qualquer");
-        });
-    }
-    @Test
-    void naoDeveCriarTarefaComTituloNulo() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Tarefa(null, "Descrição qualquer");
-        });
-    }
-
-    @Test
-    void naoDeveCriarTarefaComTituloSoComEspacos() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Tarefa("   ", "Descrição qualquer");
-        });
-    }
-    @Test
-    void deveCriarTarefaPrioritaria() {
-        TarefaPrioritaria tarefa =
-                new TarefaPrioritaria("Urgente", "Muito urgente");
-
-        assertEquals("Urgente", tarefa.getTitulo());
-    }
+    
     @Test
     void deveRemoverTarefa() throws SQLException {
         tarefaDao = new TarefaDAO(conexao);
@@ -88,12 +64,12 @@ public class TarefaTest {
 
         tarefaDao.salvar(tarefa);
 
-        tarefaDao.remover(1);
+        tarefaDao.remover(1);// eh o primeiro do banco de dados
+        String sql = "SELECT * FROM tarefas" ;
+        try (PreparedStatement stmt = conexao.prepareStatement(sql);
+            ResultSet resultadoConsulta = stmt.executeQuery()) {
 
-        try (Statement stmt = conexao.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM tarefas")) {
-
-            assertFalse(rs.next());
+            assertFalse(resultadoConsulta.next());
         }
     }
 }

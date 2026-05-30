@@ -2,12 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
 
-package com.mycompany.taskmanager.app;
+package com.mycompany.taskmanager.view;
 import com.mycompany.taskmanager.controller.ListaDeTarefas;
 import com.mycompany.taskmanager.controller.TaskManager;
 import com.mycompany.taskmanager.model.Tarefa;
 import com.mycompany.taskmanager.model.TarefaPrioritaria;
-import com.mycompany.taskmanager.util.Util;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -25,7 +25,13 @@ public class Main {
         ListaDeTarefas<TarefaPrioritaria> listaTarefaPrio = new ListaDeTarefas<>();
         
         do{
-            Util.menu();
+            System.out.println("============GERENCIADOR DE TAREFAS============");
+            System.out.println("1- Adicionar tarefa");
+            System.out.println("2- Listar tarefas");
+            System.out.println("3- Concluir tarefa");
+            System.out.println("4- Remover tarefa");
+            System.out.println("5- Sair");
+            
             int operacao;
             try{
                 operacao = Integer.parseInt(sc.nextLine());      //nesse caso sc.nextInt() geraria outra excecao 
