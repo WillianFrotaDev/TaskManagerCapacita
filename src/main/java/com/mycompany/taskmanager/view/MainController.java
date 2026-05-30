@@ -26,6 +26,7 @@ import javafx.scene.layout.VBox;
 
 import com.mycompany.taskmanager.db.ConexaoFactory;
 import java.sql.Connection;
+import java.sql.DriverManager;
 /**
  *
  * @author willianfrota
@@ -74,9 +75,9 @@ public class MainController {
         
         try {
 
-            conexao = ConexaoFactory.conectar();
+            conexao = DriverManager.getConnection("jdbc:sqlite::memory:");// conexao com o banco em memoria
 
-            tarefaDao = new TarefaDAO(conexao);
+            tarefaDao = new TarefaDAO(conexao);// estabelecer a conexao com o banco, do main.fxml para o MainController e do Maincontroller para o dao, detalhe cada botao acionado ativa um metodo do dao
 
         } catch (SQLException e) {
 
@@ -300,7 +301,7 @@ public class MainController {
     
     private void atualizarLista() throws SQLException{
         tarefasNaTela.clear();// limpa todas as tarefas para depois mostra-las de novo, vai ser usada no final do initialize para que depois dos ajustes seja atualizada a lista
-        ListaDeTarefas<Tarefa> listinhaTare = tarefaDao.listar();
+        ListaDeTarefas<Tarefa> listinhaTare = tarefaDao.listar();// pronto buscou o metodo do dao que lista as tarefas
         for (int i = 0; i < listinhaTare.tamanhoLista(); i++) {// adiciona logo as tarefas prioritarias primeiro para depois adicionar as tarefas normais
             tarefasNaTela.add(listinhaTare.obter(i));
         }

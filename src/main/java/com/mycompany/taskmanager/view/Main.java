@@ -34,7 +34,7 @@ public class Main {
             
             int operacao;
             try{
-                operacao = Integer.parseInt(sc.nextLine());      //nesse caso sc.nextInt() geraria outra excecao 
+                operacao = Integer.parseInt(sc.nextLine());//nesse caso sc.nextInt() geraria outra excecao 
             } catch(NumberFormatException e){
                 System.out.println("Operacao invalida");
                 continue;
