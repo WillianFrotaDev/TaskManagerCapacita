@@ -23,10 +23,14 @@ public class TarefaDAO {
     
     // eu criei essa conexao para poder usar nos testes
     private final Connection conexao;
-    public TarefaDAO(Connection conexao){// ser usado nos testes, porque a conexao ao SQLite eh diferente do MYSQL
+    public TarefaDAO(Connection conexao) throws SQLException{// ser usado nos testes, porque a conexao ao SQLite eh diferente do MYSQL
         this.conexao = conexao;
+        seNaoTiverTabela();
     }
-    
+    public void seNaoTiverTabela() throws SQLException{
+        
+        
+    }
     String sqlVerifica = """
                         CREATE TABLE IF NOT EXISTS tarefas (
                             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -53,7 +57,7 @@ public class TarefaDAO {
         
         try{
             
-            conexao = ConexaoFactory.conectarDBM();
+            conexao = ConexaoFactory.conectar();
             stmVerifica = conexao.prepareStatement(sqlVerifica);// prepara o statement de verificacao
             stmVerifica.execute();// executa a verificacao a respeito do banco
             
@@ -99,8 +103,10 @@ public class TarefaDAO {
                     stm.close();
                     
                 }
-                if(conexao != null){
+                if(conexao != null || conexaoMemoria != null){
                     conexao.close();
+                    conexaoMemoria.close();
+                    
                 }
             } catch(SQLException erroClose){
                     erroClose.printStackTrace();
@@ -121,7 +127,7 @@ public class TarefaDAO {
         
         
         try{
-           conexao = ConexaoFactory.conectarDBM();
+           conexao = ConexaoFactory.conectar();
            stmVerifica = conexao.prepareStatement(sqlVerifica);// prepara o statement de verificacao
            stmVerifica.execute();// executa a verificacao a respeito do banco
            
