@@ -95,27 +95,7 @@ public class TarefaDAO {
             
         } catch(SQLException e){
             e.printStackTrace();
-        }/* finally{
-            try{
-                if(resultadoConsulta != null){
-                    resultadoConsulta.close();
-                }
-                if((stm != null) || (stmVerifica != null)){
-                    stmVerifica.close();
-                    stm.close();
-                    
-                }
-                if(conexao != null || conexaoMemoria != null){
-                    conexao.close();
-                    conexaoMemoria.close();
-                    
-                }
-            } catch(SQLException erroClose){
-                    erroClose.printStackTrace();
-            }
-            
-            
-        }*/
+        }
         return listinha;
     }
     
@@ -160,20 +140,14 @@ public class TarefaDAO {
             } catch(SQLException erroRollback){
                 erroRollback.printStackTrace();
             }
-        } /*finally{// esse finally roda independente se tiver dado erro ou nao, por isso que eu coloquei tambem o SQLException pois pode ser que ele tambem der erradoã
+        } finally{
+            
             try{
-                if((stm != null) || (stmVerifica != null)){
-                    stmVerifica.close();
-                    stm.close();
-                    
-                }
-                if(conexao != null){
-                    conexao.close();
-                }
+                conexao.setAutoCommit(true);
             } catch(SQLException e){
                 e.printStackTrace();
-            }    
-        }*/
+            }
+        }
 
     }
     
@@ -186,59 +160,47 @@ public class TarefaDAO {
         
         try(
             PreparedStatement state = conexao.prepareStatement(sql);
-            ResultSet resultadoConsulta // executeQuery serve para pegar a devolucao do comando
-            ){
+             // executeQuery serve para pegar a devolucao do comando
+                    ){
             
             
             
             state.setInt(1, id);
+            try(
+                    ResultSet resultadoConsulta = state.executeQuery()
+                ){
             
-            resultadoConsulta = state.executeQuery();
         
-            if (resultadoConsulta.next()) {
+                if (resultadoConsulta.next()) {
 
-                // esses parametros desses metodos, é a categoria la da chave primaria
-                String titulo = resultadoConsulta.getString("titulo");
-                String descricao = resultadoConsulta.getString("descricao");
-                boolean prioritaria = resultadoConsulta.getBoolean("prioritaria");
-                boolean concluida = resultadoConsulta.getBoolean("concluida");
+                    // esses parametros desses metodos, é a categoria la da chave primaria
+                    String titulo = resultadoConsulta.getString("titulo");
+                    String descricao = resultadoConsulta.getString("descricao");
+                    boolean prioritaria = resultadoConsulta.getBoolean("prioritaria");
+                    boolean concluida = resultadoConsulta.getBoolean("concluida");
 
-                
-                Tarefa tarefa;
 
-                if (prioritaria) {
-                    tarefa = new TarefaPrioritaria(titulo, descricao);
-                } else {
-                    tarefa = new Tarefa(titulo, descricao);
+                    Tarefa tarefa;
+
+                    if (prioritaria) {
+                        tarefa = new TarefaPrioritaria(titulo, descricao);
+                    } else {
+                        tarefa = new Tarefa(titulo, descricao);
+                    }
+
+                    if(concluida){
+                        tarefa.concluir();
+                    }
+
+                    tarefa.setId(id);
+                    
+                    return tarefa;
+
                 }
-                
-                if(concluida){
-                    tarefa.concluir();
-                }
-                
-                tarefa.setId(id);
-                resultadoConsulta.close();
-                return tarefa;
-                
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            } /*finally{
-                try{
-                    if(resultadoConsulta != null){
-                        resultadoConsulta.close();
-                    }
-                    if((state != null) || (stmVerifica != null)){
-                        stmVerifica.close();
-                        state.close();
-                    }
-                    if(conexao != null){
-                        conexao.close();
-                    }
-                } catch(SQLException erroClose){
-                    erroClose.printStackTrace();
-                }
-        }*/
+            } 
         
     
     
@@ -298,22 +260,13 @@ public class TarefaDAO {
                 erroRoll.printStackTrace();
             }
             e.printStackTrace();
-        } /*finally {
+        } finally{
             try{
-                if((stmt != null) || (stmVerifica != null)){
-                    stmVerifica.close();
-                    stmt.close();
-                    
-                }
-                if(conexao != null){
-                    conexao.close();// tem que ser fechado por ultimo
-                } 
-            } catch(SQLException erroCls){
-                
-                erroCls.printStackTrace();
-                
+                conexao.setAutoCommit(true);
+            } catch(SQLException e){
+                e.printStackTrace();
             }
-        }*/
+        }
         
     }
     
@@ -351,20 +304,13 @@ public class TarefaDAO {
                 erroRoll.printStackTrace();
             }
             e.printStackTrace();
-        } /*finally{
+        } finally {
             try{
-                if((stmt != null) || (stmVerifica != null)){
-                    stmVerifica.close();
-                    stmt.close();
-                }
-                if(conexao != null){
-                    conexao.close();
-                }
-                
-            } catch(SQLException erroCLose){
-                erroCLose.printStackTrace();
+                conexao.setAutoCommit(true);
+            } catch(SQLException e){
+                e.printStackTrace();
             }
-        }*/
+        }
     
     }
     
