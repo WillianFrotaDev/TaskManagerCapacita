@@ -23,15 +23,8 @@ public class TarefaDAO {
     
     // eu criei essa conexao para poder usar nos testes
     private final Connection conexao;
-    public TarefaDAO(Connection conexao) throws SQLException{// ser usado nos testes, porque a conexao ao SQLite eh diferente do MYSQL
-        this.conexao = conexao;
-        seNaoTiverTabela();
-    }
-    public void seNaoTiverTabela() throws SQLException{
-        
-        
-    }
-    String sqlVerifica = """
+    
+    private final String sqlVerifica = """
                         CREATE TABLE IF NOT EXISTS tarefas (
                             id INTEGER PRIMARY KEY AUTOINCREMENT,
                             titulo TEXT NOT NULL,
@@ -39,7 +32,20 @@ public class TarefaDAO {
                             concluida BOOLEAN DEFAULT FALSE,
                             prioritaria BOOLEAN DEFAULT FALSE
                         )
-                         """;// cria o banco caso ele nao exista e coloca para usar
+                         """;// cria o banco caso ele nao exista 
+    
+    public TarefaDAO(Connection conexao) throws SQLException{// ser usado nos testes, porque a conexao ao SQLite eh diferente do MYSQL
+        this.conexao = conexao;
+        seNaoTiverTabela();
+    }
+    public void seNaoTiverTabela() throws SQLException{// esse metodo facilitar a verificaçao no decorrer do DAO inteiro
+        try(PreparedStatement stmVerifica = conexao.prepareStatement(sqlVerifica)){
+            stmVerifica.executeUpdate();
+            
+        }
+        
+    }
+    
     
     public ListaDeTarefas<Tarefa> listar() throws SQLException{// retorna a Lista para o ListView
       
@@ -50,19 +56,15 @@ public class TarefaDAO {
                      """;// isso serve para ordenar as tarefas sendo as prioritarias primeiro
         
         //Foram instaciados como nulo para verificar no final se foram instaciados
-        Connection conexao = null;
-        PreparedStatement stm = null;
-        PreparedStatement stmVerifica = null;
-        ResultSet resultadoConsulta = null;
-        
-        try{
+
+        try (
             
-            conexao = ConexaoFactory.conectar();
-            stmVerifica = conexao.prepareStatement(sqlVerifica);// prepara o statement de verificacao
-            stmVerifica.execute();// executa a verificacao a respeito do banco
+            PreparedStatement stm = conexao.prepareStatement(sql); // preparou o comando
+            ResultSet resultadoConsulta = stm.executeQuery()//// serviu executar e para pegar o resultado da consulta ao banco de dados    
+            ){
             
-            stm = conexao.prepareStatement(sql);// preparou o comando
-            resultadoConsulta = stm.executeQuery();// serviu executar e para pegar o resultado da consulta ao banco de dados
+            
+            
             
              while (resultadoConsulta.next()) {// esse resultadoConsulta.next() devolve booleano, true quando tem alguma linha de resultado a frente e false quando nao tem
                  //enquanto tiver linhas a frente ele se encaminha para a linha e retorna true, logo ele so sai desse loop quando nao tiver mais linhas
@@ -93,7 +95,7 @@ public class TarefaDAO {
             
         } catch(SQLException e){
             e.printStackTrace();
-        } finally{
+        }/* finally{
             try{
                 if(resultadoConsulta != null){
                     resultadoConsulta.close();
@@ -113,7 +115,7 @@ public class TarefaDAO {
             }
             
             
-        }
+        }*/
         return listinha;
     }
     
@@ -121,20 +123,21 @@ public class TarefaDAO {
         
         String sql = "INSERT INTO tarefas (titulo, descricao, concluida, prioritaria) VALUES (?, ?, ?, ?)";
         
-        Connection conexao = null; 
-        PreparedStatement stmVerifica = null;
-        PreparedStatement stm = null;
         
         
-        try{
-           conexao = ConexaoFactory.conectar();
-           stmVerifica = conexao.prepareStatement(sqlVerifica);// prepara o statement de verificacao
-           stmVerifica.execute();// executa a verificacao a respeito do banco
+        
+        try(
+            
+            PreparedStatement stm = conexao.prepareStatement(sql);//PreparedStatement serve para executar comandos SQL no banco de dados, porem voce primeira cria depois executa
+                
+                
+            ){
+           
            
            
            conexao.setAutoCommit(false);
            
-           stm = conexao.prepareStatement(sql);// PreparedStatement serve para executar comandos SQL no banco de dados
+           
            // isso representa a ordem de cada um dos elementos associado a string sql la de cima
            stm.setString(1, tarefa.getTitulo());
            stm.setString(2, tarefa.getDescricao());
@@ -157,7 +160,7 @@ public class TarefaDAO {
             } catch(SQLException erroRollback){
                 erroRollback.printStackTrace();
             }
-        } finally{// esse finally roda independente se tiver dado erro ou nao, por isso que eu coloquei tambem o SQLException pois pode ser que ele tambem der erradoã
+        } /*finally{// esse finally roda independente se tiver dado erro ou nao, por isso que eu coloquei tambem o SQLException pois pode ser que ele tambem der erradoã
             try{
                 if((stm != null) || (stmVerifica != null)){
                     stmVerifica.close();
@@ -170,25 +173,27 @@ public class TarefaDAO {
             } catch(SQLException e){
                 e.printStackTrace();
             }    
-        }
+        }*/
 
     }
     
     public Tarefa buscarPorId(int id) throws SQLException{
         
         String sql = "SELECT * FROM tarefas WHERE id = ?";
-        Connection conexao = null;
-        PreparedStatement stmVerifica = null;
-        PreparedStatement state = null;
-        ResultSet resultadoConsulta = null;
         
-        try{
-            conexao = ConexaoFactory.conectarDBM();
-            stmVerifica = conexao.prepareStatement(sqlVerifica);// prepara o statement de verificacao
-            stmVerifica.execute();// executa a verificacao a respeito do banco
-            state = conexao.prepareStatement(sql);
+        
+        
+        
+        try(
+            PreparedStatement state = conexao.prepareStatement(sql);
+            ResultSet resultadoConsulta // executeQuery serve para pegar a devolucao do comando
+            ){
+            
+            
+            
             state.setInt(1, id);
-            resultadoConsulta = state.executeQuery();// executeQuery serve para consultar os dados
+            
+            resultadoConsulta = state.executeQuery();
         
             if (resultadoConsulta.next()) {
 
@@ -218,7 +223,7 @@ public class TarefaDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            } finally{
+            } /*finally{
                 try{
                     if(resultadoConsulta != null){
                         resultadoConsulta.close();
@@ -233,7 +238,7 @@ public class TarefaDAO {
                 } catch(SQLException erroClose){
                     erroClose.printStackTrace();
                 }
-        }
+        }*/
         
     
     
@@ -251,19 +256,17 @@ public class TarefaDAO {
         SET titulo = ?, descricao = ?, concluida = ?, prioritaria = ?
         WHERE id = ?""";
         
-        Connection conexao = null;
-        PreparedStatement stmVerifica = null;
-        PreparedStatement stmt = null;
-        try{ 
+        
+        try(
+            
+            PreparedStatement stmt = conexao.prepareStatement(sql)
+            ){ 
             
             
-            conexao = ConexaoFactory.conectarDBM();
-            stmVerifica = conexao.prepareStatement(sqlVerifica);// prepara o statement de verificacao
-            stmVerifica.execute();// executa a verificacao a respeito do banco
             
             conexao.setAutoCommit(false);
             
-            stmt = conexao.prepareStatement(sql);
+            
          
 
             stmt.setString(1, tarefa.getTitulo());
@@ -295,7 +298,7 @@ public class TarefaDAO {
                 erroRoll.printStackTrace();
             }
             e.printStackTrace();
-        } finally {
+        } /*finally {
             try{
                 if((stmt != null) || (stmVerifica != null)){
                     stmVerifica.close();
@@ -310,7 +313,7 @@ public class TarefaDAO {
                 erroCls.printStackTrace();
                 
             }
-        }
+        }*/
         
     }
     
@@ -318,16 +321,11 @@ public class TarefaDAO {
         
         //vou primeiro usar o metodo buscarPorId para depois pegar e executar esse
         String sql = "DELETE FROM tarefas WHERE id = ?";
-        Connection conexao = null;
-        PreparedStatement stmVerifica = null;
-        PreparedStatement stmt = null;
-        try{// try with resources para fechar automaticamente o connection e o prepared statement
-            conexao = ConexaoFactory.conectarDBM();
+        
+        try(PreparedStatement stmt = conexao.prepareStatement(sql)){// try with resources para fechar automaticamente o connection e o prepared statement
+          
             conexao.setAutoCommit(false);
-            stmVerifica = conexao.prepareStatement(sqlVerifica);// prepara o statement de verificacao
-            stmVerifica.execute();// executa a verificacao a respeito do banco
             
-            stmt = conexao.prepareStatement(sql);
          
 
             stmt.setInt(1, id);// esse metodo serve para setar o valor "?"
@@ -353,7 +351,7 @@ public class TarefaDAO {
                 erroRoll.printStackTrace();
             }
             e.printStackTrace();
-        } finally{
+        } /*finally{
             try{
                 if((stmt != null) || (stmVerifica != null)){
                     stmVerifica.close();
@@ -366,7 +364,7 @@ public class TarefaDAO {
             } catch(SQLException erroCLose){
                 erroCLose.printStackTrace();
             }
-        }
+        }*/
     
     }
     
