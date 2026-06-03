@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.taskmanager.view;
+package com.mycompany.taskmanager.controller;
 
 import com.mycompany.taskmanager.controller.ListaDeTarefas;
 import com.mycompany.taskmanager.controller.TaskManager;
@@ -75,7 +75,7 @@ public class MainController {
         
         try {
 
-            conexao = DriverManager.getConnection("jdbc:sqlite::memory:");// conexao com o banco em memoria
+            conexao = ConexaoFactory.conectar();// conexao com o banco em memoria
 
             tarefaDao = new TarefaDAO(conexao);// estabelecer a conexao com o banco, do main.fxml para o MainController e do Maincontroller para o dao, detalhe cada botao acionado ativa um metodo do dao
 
