@@ -26,7 +26,7 @@ public class TarefaDAO {
     
     private final String sqlVerifica = """
                         CREATE TABLE IF NOT EXISTS tarefas (
-                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            id INT PRIMARY KEY AUTO_INCREMENT,
                             titulo TEXT NOT NULL,
                             descricao TEXT,
                             concluida BOOLEAN DEFAULT FALSE,

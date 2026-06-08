@@ -26,11 +26,9 @@ public class ConexaoFactory { // essa classe é necessaria pois facilita a conex
     
     
     public static Connection conectar() throws SQLException {
-        try{
-        return DriverManager.getConnection(URL,USUARIO,SENHA);// toda vez que eu quisse me conectar com banco de dados teria que usar esse comando junto com as credenciais
-        } catch(SQLException e){
-            return DriverManager.getConnection("jdbc:sqlite::memory:");
-        }
+        
+            return DriverManager.getConnection(URL,USUARIO,SENHA);// toda vez que eu quisse me conectar com banco de dados teria que usar esse comando junto com as credenciais
+        
         }// agora com o metodo conectar nao vai ser preciso eu colocar as credencias toda hora
     
    
