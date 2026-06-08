@@ -77,8 +77,8 @@ public class TarefaDaoTest {
              ResultSet resultadoSalvar = stmt.executeQuery()) {// pega o resultado da consulta
 
             assertTrue(resultadoSalvar.next());// verifica se a tarefa foi criada
-            assertEquals("Testes com SQLite", resultadoSalvar.getString("titulo"));// o teste so passa se
-            assertEquals("testar em outro banco de dados para nao dar problema", resultadoSalvar.getString("descricao"));
+            assertEquals("Salva Prio", resultadoSalvar.getString("titulo"));// o teste so passa se
+            assertEquals("Tem que salvar", resultadoSalvar.getString("descricao"));
             assertFalse(resultadoSalvar.getBoolean("concluida"));
             assertTrue(resultadoSalvar.getBoolean("prioritaria"));// tem que ser true, porque eh prioritaria
         }
