@@ -24,26 +24,43 @@ public class TarefaDAO {
     // eu criei essa conexao para poder usar nos testes
     private final Connection conexao;
     
-    private final String sqlVerifica = """
-                        CREATE TABLE IF NOT EXISTS tarefas (
-                            id INT PRIMARY KEY AUTO_INCREMENT,
+    private String sqlVerifica;
+    
+    
+    public TarefaDAO(Connection conexao) throws SQLException{// ser usado nos testes, porque a conexao ao SQLite eh diferente do MYSQL
+        this.conexao = conexao;
+        
+        seNaoTiverTabela();
+    }
+    public void seNaoTiverTabela() throws SQLException{// esse metodo facilitar a verificaçao no decorrer do DAO inteiro
+        String qualBanco = conexao.getMetaData().getDatabaseProductName();
+        if("MySQL".equalsIgnoreCase(qualBanco))
+            sqlVerifica = """
+                          CREATE TABLE IF NOT EXISTS tarefas (
+                            id INT AUTO_INCREMENT PRIMARY KEY,
                             titulo TEXT NOT NULL,
                             descricao TEXT,
                             concluida BOOLEAN DEFAULT FALSE,
                             prioritaria BOOLEAN DEFAULT FALSE
-                        )
-                         """;// cria o banco caso ele nao exista 
-    
-    public TarefaDAO(Connection conexao) throws SQLException{// ser usado nos testes, porque a conexao ao SQLite eh diferente do MYSQL
-        this.conexao = conexao;
-        seNaoTiverTabela();
-    }
-    public void seNaoTiverTabela() throws SQLException{// esse metodo facilitar a verificaçao no decorrer do DAO inteiro
-        try(PreparedStatement stmVerifica = conexao.prepareStatement(sqlVerifica)){
-            stmVerifica.executeUpdate();
-            
+                        )""";
+        else if ("SQLite".equalsIgnoreCase(qualBanco)) {
+
+        sqlVerifica = """
+            CREATE TABLE IF NOT EXISTS tarefas (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                titulo TEXT NOT NULL,
+                descricao TEXT,
+                concluida BOOLEAN DEFAULT FALSE,
+                prioritaria BOOLEAN DEFAULT FALSE
+            )
+            """;
+
+        } else {
+            throw new SQLException("Banco não suportado: " + qualBanco);
         }
-        
+        try(PreparedStatement sttm = conexao.prepareStatement(sqlVerifica)){
+            sttm.execute();
+        }
     }
     
     
@@ -133,13 +150,11 @@ public class TarefaDAO {
            
            
         } catch (SQLException e) {
-            try {
-                if(conexao != null){
-                    conexao.rollback();
-                }
-            } catch(SQLException erroRollback){
-                erroRollback.printStackTrace();
+            
+            if(conexao != null){
+                conexao.rollback();
             }
+            throw e;
         } finally{
             
             try{
