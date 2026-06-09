@@ -28,7 +28,7 @@ public class TarefaTest {
         conexao = DriverManager.getConnection("jdbc:sqlite::memory:");
         tarefaDao = new TarefaDAO(conexao);
         String sql = """
-                CREATE TABLE tarefas (
+                CREATE TABLE IF NOT EXISTS tarefas (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     titulo TEXT NOT NULL,
                     descricao TEXT,
