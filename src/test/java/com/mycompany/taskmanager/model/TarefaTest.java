@@ -4,7 +4,7 @@
  */
 package com.mycompany.taskmanager.model;
 
-import com.mycompany.taskmanager.dao.TarefaDAO;
+import com.mycompany.taskmanager.repository.TarefaDAO;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

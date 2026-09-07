@@ -4,6 +4,7 @@
  */
 package com.mycompany.taskmanager.dao;
 
+import com.mycompany.taskmanager.repository.TarefaDAO;
 import com.mycompany.taskmanager.model.Tarefa;
 import com.mycompany.taskmanager.model.TarefaPrioritaria;
 import org.junit.jupiter.api.*;
