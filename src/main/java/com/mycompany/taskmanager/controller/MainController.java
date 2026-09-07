@@ -4,9 +4,9 @@
  */
 package com.mycompany.taskmanager.controller;
 
-import com.mycompany.taskmanager.controller.ListaDeTarefas;
+import com.mycompany.taskmanager.service.ListaDeTarefas;
 import com.mycompany.taskmanager.controller.TaskManager;
-import com.mycompany.taskmanager.dao.TarefaDAO;
+import com.mycompany.taskmanager.repository.TarefaDAO;
 import com.mycompany.taskmanager.model.Tarefa;
 import com.mycompany.taskmanager.model.TarefaPrioritaria;
 import java.sql.SQLException;
@@ -24,7 +24,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
-import com.mycompany.taskmanager.db.ConexaoFactory;
+import com.mycompany.taskmanager.config.ConexaoFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 /**

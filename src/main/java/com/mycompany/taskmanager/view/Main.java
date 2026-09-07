@@ -3,7 +3,7 @@
  */
 
 package com.mycompany.taskmanager.view;
-import com.mycompany.taskmanager.controller.ListaDeTarefas;
+import com.mycompany.taskmanager.service.ListaDeTarefas;
 import com.mycompany.taskmanager.controller.TaskManager;
 import com.mycompany.taskmanager.model.Tarefa;
 import com.mycompany.taskmanager.model.TarefaPrioritaria;
