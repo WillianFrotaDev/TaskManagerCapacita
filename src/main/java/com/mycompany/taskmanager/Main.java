@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
 
-package com.mycompany.taskmanager.view;
+package com.mycompany.taskmanager;
 import com.mycompany.taskmanager.service.ListaDeTarefas;
 import com.mycompany.taskmanager.controller.TaskManager;
 import com.mycompany.taskmanager.model.Tarefa;

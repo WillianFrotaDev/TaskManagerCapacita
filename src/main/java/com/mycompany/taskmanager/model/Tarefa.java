@@ -4,11 +4,13 @@
  */
 package com.mycompany.taskmanager.model;
 
+
 /**
  *
  * @author willianfrota
  */
 public class Tarefa {
+    
     
     private int id;
     private String titulo;
