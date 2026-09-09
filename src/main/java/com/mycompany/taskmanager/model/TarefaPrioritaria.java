@@ -4,11 +4,17 @@
  */
 package com.mycompany.taskmanager.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
 /**
  *
  * @author willianfrota
  */
+@Entity
+@Table(name = "tarefas_prioritarias")
 public class TarefaPrioritaria extends Tarefa{
+    
     public TarefaPrioritaria(String titulo, String descricao){
         super(titulo,descricao);
     }

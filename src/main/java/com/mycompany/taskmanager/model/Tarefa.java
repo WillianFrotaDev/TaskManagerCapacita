@@ -4,18 +4,33 @@
  */
 package com.mycompany.taskmanager.model;
 
-
+import jakarta.persistence.*;
 /**
  *
  * @author willianfrota
  */
+@Entity
+@Table(name = "tarefas")
 public class Tarefa {
     
-    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)// chave primaria da tabela tarefas
     private int id;
+    
+    @Column(name = "titulo", length = 50, nullable = false)
     private String titulo;
+    
+    @Column(name = "descricao", length = 50, nullable = false)
     private String descricao;
+    
+    
     private boolean concluido;
+    
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)// cria a chave estrangeira
+    private Usuario usuario;// isso serve para criar uma relacao tarefa e usuario
+    
+    public Tarefa(){}
     
     public Tarefa(String titulo, String descricao){
         if (titulo == null || titulo.isBlank()) {
@@ -26,6 +41,11 @@ public class Tarefa {
         this.descricao = descricao;
         this.concluido = false;
     }
+    
+    public int getId(){
+        return id;
+    }
+    
     public String getTitulo(){
         return titulo;
     }

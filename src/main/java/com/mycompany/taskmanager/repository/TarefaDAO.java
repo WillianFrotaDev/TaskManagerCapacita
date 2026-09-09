@@ -40,7 +40,7 @@ public class TarefaDAO {
                             id INT AUTO_INCREMENT PRIMARY KEY,
                             titulo TEXT NOT NULL,
                             descricao TEXT,
-                            concluida BOOLEAN DEFAULT FALSE,
+                            concluido BOOLEAN DEFAULT FALSE,
                             prioritaria BOOLEAN DEFAULT FALSE
                         )""";
         else if ("SQLite".equalsIgnoreCase(qualBanco)) {
@@ -50,7 +50,7 @@ public class TarefaDAO {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 titulo TEXT NOT NULL,
                 descricao TEXT,
-                concluida BOOLEAN DEFAULT FALSE,
+                concluido BOOLEAN DEFAULT FALSE,
                 prioritaria BOOLEAN DEFAULT FALSE
             )
             """;
@@ -89,7 +89,7 @@ public class TarefaDAO {
                 int id = resultadoConsulta.getInt("id");
                 String titulo = resultadoConsulta.getString("titulo");
                 String descricao = resultadoConsulta.getString("descricao");
-                boolean concluida = resultadoConsulta.getBoolean("concluida");
+                boolean concluida = resultadoConsulta.getBoolean("concluido");
                 boolean prioritaria = resultadoConsulta.getBoolean("prioritaria");
 
                 Tarefa tarefa;
@@ -118,7 +118,7 @@ public class TarefaDAO {
     
     public <T extends Tarefa> void salvar(T tarefa) throws SQLException{
         
-        String sql = "INSERT INTO tarefas (titulo, descricao, concluida, prioritaria) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO tarefas (titulo, descricao, concluido, prioritaria) VALUES (?, ?, ?, ?)";
         
         
         
@@ -192,7 +192,7 @@ public class TarefaDAO {
                     String titulo = resultadoConsulta.getString("titulo");
                     String descricao = resultadoConsulta.getString("descricao");
                     boolean prioritaria = resultadoConsulta.getBoolean("prioritaria");
-                    boolean concluida = resultadoConsulta.getBoolean("concluida");
+                    boolean concluida = resultadoConsulta.getBoolean("concluido");
 
 
                     Tarefa tarefa;
@@ -230,7 +230,7 @@ public class TarefaDAO {
         // vou usar junto com buscarPorId
         String sql = """
         UPDATE tarefas
-        SET titulo = ?, descricao = ?, concluida = ?, prioritaria = ?
+        SET titulo = ?, descricao = ?, concluido = ?, prioritaria = ?
         WHERE id = ?""";
         
         
