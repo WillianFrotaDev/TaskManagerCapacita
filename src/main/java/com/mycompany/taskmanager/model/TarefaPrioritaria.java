@@ -15,8 +15,14 @@ import jakarta.persistence.Table;
 @Table(name = "tarefas_prioritarias")
 public class TarefaPrioritaria extends Tarefa{
     
-    public TarefaPrioritaria(String titulo, String descricao){
-        super(titulo,descricao);
+    //Construtor padrao exigido pelo Hibernate
+    public TarefaPrioritaria(){
+        super();
+    }
+    
+    // Atributos herdados da classe tarefa OBS: o hibernate primeiro cria um objeto java para depois determinar seus atributos logo nao da para buscar da classe mae tarefa
+    public TarefaPrioritaria(String titulo, String descricao, Usuario usuario){
+        super(titulo,descricao,usuario);
     }
     @Override
     public String getTitulo(){

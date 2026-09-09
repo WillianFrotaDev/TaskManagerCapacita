@@ -11,6 +11,7 @@ import jakarta.persistence.*;
  */
 @Entity
 @Table(name = "tarefas")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Tarefa {
     
     @Id
@@ -32,7 +33,7 @@ public class Tarefa {
     
     public Tarefa(){}
     
-    public Tarefa(String titulo, String descricao){
+    public Tarefa(String titulo, String descricao, Usuario usuario){
         if (titulo == null || titulo.isBlank()) {
             throw new IllegalArgumentException("Título não pode ser vazio");
         }
@@ -40,10 +41,15 @@ public class Tarefa {
         this.titulo = titulo;
         this.descricao = descricao;
         this.concluido = false;
+        this.usuario = usuario;
+    }
+    
+    public Usuario getUsuario(){
+        return usuario;
     }
     
     public int getId(){
-        return id;
+        return id;// id para o banco de dados buscar
     }
     
     public String getTitulo(){
@@ -72,10 +78,7 @@ public class Tarefa {
         this.concluido = true;
         return true;
     }
-    public int getId() {// id para o banco de dados buscar
-        return id;
-    }
-
+    
     public void setId(int id) {// para o banco de dados determina o id
         this.id = id;
     }
