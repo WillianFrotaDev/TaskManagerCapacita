@@ -21,6 +21,7 @@ public class TarefaPrioritaria extends Tarefa{
     }
     
     // Atributos herdados da classe tarefa OBS: o hibernate primeiro cria um objeto java para depois determinar seus atributos logo nao da para buscar da classe mae tarefa
+    // Aqui temos uma herança automatica de atributos e o hibernate gerencia a chave estrangeira e primaria dessa classe para ser possivel buscar com o JOIN
     public TarefaPrioritaria(String titulo, String descricao, Usuario usuario){
         super(titulo,descricao,usuario);
     }

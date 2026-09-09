@@ -11,7 +11,7 @@ import jakarta.persistence.*;
  */
 @Entity
 @Table(name = "tarefas")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED)// torna possivel que la na classe tarefaprioritaria seja adaptada para fazer JOIN diretamente nessa tabela
 public class Tarefa {
     
     @Id
