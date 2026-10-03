@@ -53,12 +53,12 @@ public class Main {
                     Tarefa tarefa;
                     TarefaPrioritaria tarefaPrio;
                     if(ehPrioridade.equalsIgnoreCase("s")){
-                        tarefaPrio = new TarefaPrioritaria(titulo, descricao);
-                        gerenciador.adicionarTarefaPrioritaria(listaTarefaPrio, tarefaPrio);
+                   //     tarefaPrio = new TarefaPrioritaria(titulo, descricao);
+               //         gerenciador.adicionarTarefaPrioritaria(listaTarefaPrio, tarefaPrio);
                         
                     } else if(ehPrioridade.equalsIgnoreCase("n")){
-                        tarefa = new Tarefa(titulo, descricao);
-                        gerenciador.adicionarTarefa(listaTarefa, tarefa);
+                    //    tarefa = new Tarefa(titulo, descricao);
+                 //       gerenciador.adicionarTarefa(listaTarefa, tarefa);
                         
                         
                     } else{
