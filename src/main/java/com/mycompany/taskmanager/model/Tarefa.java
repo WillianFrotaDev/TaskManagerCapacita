@@ -11,7 +11,7 @@ import jakarta.persistence.*;
  */
 @Entity
 @Table(name = "tarefas")
-@Inheritance(strategy = InheritanceType.JOINED)// torna possivel que la na classe tarefaprioritaria seja adaptada para fazer JOIN diretamente nessa tabela
+@Inheritance(strategy = InheritanceType.JOINED)// torna possivel que la na classe tarefa prioritaria seja adaptada para fazer JOIN diretamente nessa tabela
 public class Tarefa {
     
     @Id
@@ -24,12 +24,12 @@ public class Tarefa {
     @Column(name = "descricao", length = 50, nullable = false)
     private String descricao;
     
-    
+    @Column(name = "concluido", nullable = false)
     private boolean concluido;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)// vai carregar o usuario somente daquela tarefa
     @JoinColumn(name = "usuario_id", nullable = false)// cria a chave estrangeira
-    private Usuario usuario;// isso serve para criar uma relacao tarefa e usuario
+    private Usuario usuario;// isso serve para criar uma relacao tarefa e usuario, declarada la no usuario como mappedBy
     
     public Tarefa(){}
     
@@ -46,6 +46,10 @@ public class Tarefa {
     
     public Usuario getUsuario(){
         return usuario;
+    }
+    
+    public void setUsuario(Usuario usuario){// esse metodo vai servir para que quando for adicionado uma tarefa a lista de usuario, a tarefa consiga saber quem é o usuario dela
+        this.usuario = usuario;
     }
     
     public int getId(){

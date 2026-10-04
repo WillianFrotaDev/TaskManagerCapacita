@@ -4,7 +4,10 @@
  */
 package com.mycompany.taskmanager.model;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,12 +28,21 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // aqui diz que o valor vai ser gerado automaticamente para ser uma chave primaria de identificaçao
     private int id;// chave primaria
     
+    @Column(name = "nome", length = 25, nullable = false)
     private String nome;
+    
+    @Column(name = "senha", length = 20, nullable = false)
     private String senha;
+    
+    @Column(name = "email", length = 50, nullable = false)
     private String email;
     
-    @OneToMany(mappedBy = "usuario")
-    private List<Tarefa> tarefas = new ArrayList<>();// isso serve para criar uma relacao usuario e tarefas
+    
+    
+    // cascade serve para salvar tudo de uma vez, ao salvar a entidade usuario tambem salva suas tarefas
+    //esse fetch serve para dizer como vai ser o carregamento dessa entidade no banco, se vai carregar as tarefas junto ao usuario(EAGER) ou somente o usuario (LAZY) com seus outros atributos como id e etc
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)// nao eh o nome da tabela em que ou da classe. É o nome da variavel inicializada na outra classe
+    private List<Tarefa> tarefas = new ArrayList<>();// isso serve para criar uma relacao usuario e tarefas, isso funciona por causa do mappedBy
     
     
     public Usuario(){} // precisa por que ao consultar o banco o hibernate faz uma conversao das linhas da tabela com objetos java e ele usa esse construtor para isso
@@ -43,7 +55,13 @@ public class Usuario {
     
     
     
-    
+    // o bom desse metodo que ele ajusta o valor das duas tabelas de uma vez so
+    public void addTarefa(Tarefa tarefa){// quando for criado uma tarefa ela tem que ser adicionada a lista tarefas do seu respectivo usuario
+        
+        tarefas.add(tarefa);// adiciona a tarefa na lista do usuario que criou a tarefa
+        
+        tarefa.setUsuario(this);// informa a tarefa qual é o seu usuario
+    }
     //Tambem precisa de ter todos os getters e setters para poder pegar cada informacao de cada objeto criado pelo hibernate
     
     public int getId(){
