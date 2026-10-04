@@ -55,13 +55,19 @@ public class Usuario {
     
     
     
-    // o bom desse metodo que ele ajusta o valor das duas tabelas de uma vez so
+    // o bom dos metodos addTarefa e removeTarefa quee eles ajusta o valor das duas tabelas de uma vez so
     public void addTarefa(Tarefa tarefa){// quando for criado uma tarefa ela tem que ser adicionada a lista tarefas do seu respectivo usuario
         
         tarefas.add(tarefa);// adiciona a tarefa na lista do usuario que criou a tarefa
         
         tarefa.setUsuario(this);// informa a tarefa qual é o seu usuario
     }
+    
+    public void removeTarefa(Tarefa tarefa){
+        tarefas.remove(tarefa);
+        tarefa.setUsuario(null);
+    }
+    
     //Tambem precisa de ter todos os getters e setters para poder pegar cada informacao de cada objeto criado pelo hibernate
     
     public int getId(){
