@@ -6,7 +6,7 @@ package com.mycompany.taskmanager.controller;
 
 import com.mycompany.taskmanager.service.ListaDeTarefas;
 import com.mycompany.taskmanager.controller.TaskManager;
-import com.mycompany.taskmanager.repository.TarefaDAO;
+import com.mycompany.taskmanager.repository.TarefaRepository;
 import com.mycompany.taskmanager.model.Tarefa;
 import com.mycompany.taskmanager.model.TarefaPrioritaria;
 import java.sql.SQLException;
@@ -55,7 +55,7 @@ public class MainController {
     private Label labelCriaGeral;// todo o texto que tera em cada espaco de tarefa na lista de tarefas
     
     // Essa eh a ligacacao do banco de dados com o frontend
-    private TarefaDAO tarefaDao;// vai integrar com o banco de dados
+    private TarefaRepository tarefaDao;// vai integrar com o banco de dados
     private Connection conexao;// tive que criar uma conexao para conseguir fazer testes no SQLite
     //------
     
@@ -77,7 +77,7 @@ public class MainController {
 
             conexao = ConexaoFactory.conectar();// conexao com o banco em memoria
 
-            tarefaDao = new TarefaDAO(conexao);// estabelecer a conexao com o banco, do main.fxml para o MainController e do Maincontroller para o dao, detalhe cada botao acionado ativa um metodo do dao
+            //tarefaDao = new TarefaDAO(conexao);// estabelecer a conexao com o banco, do main.fxml para o MainController e do Maincontroller para o dao, detalhe cada botao acionado ativa um metodo do dao
 
         } catch (SQLException e) {
 
@@ -202,7 +202,7 @@ public class MainController {
         //gerenciador.concluirTarefa(tarefas, tarefasPrio, indiceSelecionado + 1);// o metodo que eu criei no backend
         
         tarefaSelecionada.concluir();
-        tarefaDao.editar(tarefaSelecionada);
+        //tarefaDao.editar(tarefaSelecionada);
         atualizarLista();
     }
     @FXML
@@ -225,7 +225,7 @@ public class MainController {
             // orElse(): é no caso de nao existir um valor selecionado, ai quando isso acontece ele marca como buttonType.Cancel ai ele compara com o ButtonType.OK
             
             //gerenciador.removerTarefa(tarefas, tarefasPrio, indiceSelecionado + 1);// chama o metodo do gerenciador para remover
-            tarefaDao.remover(selecionada.getId());
+            //tarefaDao.remover(selecionada.getId());
             atualizarLista();
         }
     }
@@ -240,12 +240,12 @@ public class MainController {
         Tarefa novaTarefa;
         if (checkPrioritaria.isSelected()) {// se essa checkbox estiver selecionada
             //gerenciador.adicionarTarefaPrioritaria(tarefasPrio, new TarefaPrioritaria(titulo, descricao));
-            novaTarefa = new TarefaPrioritaria(titulo, descricao);
+            //novaTarefa = new TarefaPrioritaria(titulo, descricao);
         } else {
             //gerenciador.adicionarTarefa(tarefas, new Tarefa(titulo, descricao));
-            novaTarefa = new Tarefa(titulo, descricao);
+            //novaTarefa = new Tarefa(titulo, descricao);
         }
-        tarefaDao.salvar(novaTarefa);
+        //tarefaDao.salvar(novaTarefa);
         atualizarLista();
     }
     
@@ -259,12 +259,12 @@ public class MainController {
 
         //removerPorReferencia(editaTarefa);// tirei o editaTarefa da lista antes de colocar a nova versao
 
-        Tarefa novaTarefa = deveSerPrioritaria ? new TarefaPrioritaria(titulo, descricao): new Tarefa(titulo, descricao);// cria uma nova tarefa
+        //Tarefa novaTarefa = deveSerPrioritaria ? new TarefaPrioritaria(titulo, descricao): new Tarefa(titulo, descricao);// cria uma nova tarefa
         
         
-        if (estavaConcluida) {// se a tarefa antiga estiver concluida, ele vai concluir a nova agora
-            novaTarefa.concluir();
-        }
+        //if (estavaConcluida) {// se a tarefa antiga estiver concluida, ele vai concluir a nova agora
+          //  novaTarefa.concluir();
+        //}
         
         /*if (deveSerPrioritaria) {// para determinar em qual lista adicionar a tarefa
             //tarefasPrio.adicionar((TarefaPrioritaria) novaTarefa);
@@ -274,7 +274,7 @@ public class MainController {
             //tarefas.adicionar(novaTarefa);
         }*/
         novaTarefa.setId(editaTarefa.getId());
-        tarefaDao.editar(novaTarefa);
+        //tarefaDao.editar(novaTarefa);
 
         editaTarefa = null;// serve para apagar e quando o usuario for fazer o processo de criar uma nova tarefa, ele nao bugue o backend
         // porque la no metodo salvar ele determina se vai criar ou atualizarTarefa
@@ -301,10 +301,10 @@ public class MainController {
     
     private void atualizarLista() throws SQLException{
         tarefasNaTela.clear();// limpa todas as tarefas para depois mostra-las de novo, vai ser usada no final do initialize para que depois dos ajustes seja atualizada a lista
-        ListaDeTarefas<Tarefa> listinhaTare = tarefaDao.listar();// pronto buscou o metodo do dao que lista as tarefas
-        for (int i = 0; i < listinhaTare.tamanhoLista(); i++) {// adiciona logo as tarefas prioritarias primeiro para depois adicionar as tarefas normais
-            tarefasNaTela.add(listinhaTare.obter(i));
-        }
+        //ListaDeTarefas<Tarefa> listinhaTare = tarefaDao.listar();// pronto buscou o metodo do dao que lista as tarefas
+        //for (int i = 0; i < listinhaTare.tamanhoLista(); i++) {// adiciona logo as tarefas prioritarias primeiro para depois adicionar as tarefas normais
+        //    tarefasNaTela.add(listinhaTare.obter(i));
+        //}
         /*for (int i = 0; i < listinhaTare.tamanhoLista(); i++){// adiciona as tarefas normais
             Tarefa tarefinha
             tarefasNaTela.add(tarefas.obter(i));
