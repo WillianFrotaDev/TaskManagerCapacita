@@ -14,6 +14,6 @@ import org.springframework.stereotype.Repository;
  * @author willianfrota
  */
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, int> {
+public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     
 }

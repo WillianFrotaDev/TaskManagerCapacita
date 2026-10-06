@@ -273,7 +273,7 @@ public class MainController {
         } else {
             //tarefas.adicionar(novaTarefa);
         }*/
-        novaTarefa.setId(editaTarefa.getId());
+        //novaTarefa.setId(editaTarefa.getId());
         //tarefaDao.editar(novaTarefa);
 
         editaTarefa = null;// serve para apagar e quando o usuario for fazer o processo de criar uma nova tarefa, ele nao bugue o backend
