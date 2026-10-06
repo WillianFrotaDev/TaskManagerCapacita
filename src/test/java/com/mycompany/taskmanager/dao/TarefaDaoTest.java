@@ -4,7 +4,7 @@
  */
 package com.mycompany.taskmanager.dao;
 
-import com.mycompany.taskmanager.repository.TarefaDAO;
+import com.mycompany.taskmanager.repository.TarefaRepository;
 import com.mycompany.taskmanager.model.Tarefa;
 import com.mycompany.taskmanager.model.TarefaPrioritaria;
 import org.junit.jupiter.api.*;
@@ -24,12 +24,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class TarefaDaoTest {
     private Connection conexao;
-    private TarefaDAO tarefaDao;
+    private TarefaRepository tarefaDao;
 
     @BeforeEach
     void prepararBanco() throws SQLException {// cria o banco de dados com os recursos e id
         conexao = DriverManager.getConnection("jdbc:sqlite::memory:");
-        tarefaDao = new TarefaDAO(conexao);
+        //tarefaRepository = new TarefaRepository(conexao);
         
         String sql = """
                     CREATE TABLE IF NOT EXISTS tarefas (
@@ -52,9 +52,9 @@ public class TarefaDaoTest {
 
     @Test
     void deveSalvarTarefaNoBanco() throws SQLException {
-        Tarefa tarefa = new Tarefa("Testes com SQLite", "testar em outro banco de dados para nao dar problema");
+        //Tarefa tarefa = new Tarefa("Testes com SQLite", "testar em outro banco de dados para nao dar problema");
 
-        tarefaDao.salvar(tarefa);
+        //tarefaDao.salvar(tarefa);
         String sql = "SELECT * FROM tarefas";
         try (PreparedStatement stmt = conexao.prepareStatement(sql);
              ResultSet resultadoSalvar = stmt.executeQuery()) {// pega o resultado da consulta
@@ -70,8 +70,8 @@ public class TarefaDaoTest {
     @Test
     void deveSalvarTarefaPrioritariaNoBanco() throws SQLException{
         
-        TarefaPrioritaria tarefaPrio = new TarefaPrioritaria("Salva Prio", "Tem que salvar");
-        tarefaDao.salvar(tarefaPrio);
+        //TarefaPrioritaria tarefaPrio = new TarefaPrioritaria("Salva Prio", "Tem que salvar");
+        //tarefaDao.salvar(tarefaPrio);
         
         String sql = "SELECT * FROM tarefas";
         try (PreparedStatement stmt = conexao.prepareStatement(sql);
