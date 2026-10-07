@@ -82,6 +82,9 @@ public class Tarefa {
         this.concluido = true;
         return true;
     }
+    public void setConcluida(boolean conclui){
+        this.concluido = conclui;
+    }
     
     public void setId(int id) {// para o banco de dados determina o id
         this.id = id;

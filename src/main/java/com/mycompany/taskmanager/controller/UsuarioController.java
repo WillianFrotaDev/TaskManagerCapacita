@@ -4,10 +4,18 @@
  */
 package com.mycompany.taskmanager.controller;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 /**
  *
  * @author willianfrota
  */
+@RestController
+@RequestMapping("api/v1/usuarios")
 public class UsuarioController {
     
+    public boolean verificarUsuario() {
+        
+    }
 }
