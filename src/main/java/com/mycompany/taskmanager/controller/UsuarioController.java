@@ -4,6 +4,7 @@
  */
 package com.mycompany.taskmanager.controller;
 
+import com.mycompany.taskmanager.repository.UsuarioRepository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api/v1/usuarios")
 public class UsuarioController {
+    
+    private final UsuarioRepository userRepo;
     
     public boolean verificarUsuario() {
         

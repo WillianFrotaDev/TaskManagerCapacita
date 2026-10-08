@@ -6,6 +6,8 @@ package com.mycompany.taskmanager.service;
 
 import com.mycompany.taskmanager.model.Usuario;
 import com.mycompany.taskmanager.repository.UsuarioRepository;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 /**
@@ -34,6 +36,32 @@ public class UsuarioService {
         usuario.setSenha(senha);
         usuario.setNome(nome);
         userRepo.save(usuario);// .save tem o papel tanto de salvar como de atualizar: INSERT e UPDATE
+        
+    }
+    
+    public List<Usuario> listarTodos(){
+        List<Usuario> listaUsuarios =userRepo.findAll();
+        return listaUsuarios;
+    }
+    
+    public void salvar(Usuario usuario){
+        userRepo.save(usuario);
+        
+    }
+    
+    public Optional<Usuario> buscarPorId(int id){
+        Optional<Usuario> usuario = userRepo.findById(id);// esse metodo do repository eh do tipo optional entao para atribui retorno tambem precisa que seja desse tipo
+        return usuario;
+    }
+    
+    public void deletar(int id){
+        userRepo.deleteById(id);
+    }
+    
+    public void buscarPorUsuario(Usuario usuario){
+        int id = usuario.getId();
+        buscarPorId(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado no banco de dados!"));
         
     }
 }
