@@ -24,6 +24,15 @@ public class UsuarioService {
     }
     
     
+    public void criarConta(Usuario usuario){
+        
+        if(usuarioExiste(usuario)){
+            
+        }
+        userRepo.save()
+                
+    }
+    
     public void atualizarUsuario(String nome, String email, int id, String senha){
         
         
@@ -58,10 +67,18 @@ public class UsuarioService {
         userRepo.deleteById(id);
     }
     
-    public void buscarPorUsuario(Usuario usuario){
-        int id = usuario.getId();
-        buscarPorId(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado no banco de dados!"));
+    public boolean usuarioExiste(Usuario usuario){
         
+        if(usuario == null){
+            throw new IllegalArgumentException("O usuário não pode ser nulo!");
+        }
+        
+        int id = usuario.getId();
+        String nome = usuario.getNome();
+        
+        return userRepo.existsById(id);
+                
     }
+    
+    
 }

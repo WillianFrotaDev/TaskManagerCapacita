@@ -4,7 +4,11 @@
  */
 package com.mycompany.taskmanager.controller;
 
+import com.mycompany.taskmanager.model.Usuario;
 import com.mycompany.taskmanager.repository.UsuarioRepository;
+import com.mycompany.taskmanager.service.UsuarioService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,9 +20,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/usuarios")
 public class UsuarioController {
     
-    private final UsuarioRepository userRepo;
+    private final UsuarioService userServi;
     
-    public boolean verificarUsuario() {
+    public UsuarioController(UsuarioService userServi){
+        this.userServi = userServi;
+        
+    }
+    
+    @PostMapping
+    public ResponseEntity<Void> adicionarUsuario(Usuario usuario) {
+        userServi.buscarPorUsuario(usuario);
         
     }
 }
