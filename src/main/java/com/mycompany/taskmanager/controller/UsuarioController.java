@@ -28,8 +28,7 @@ public class UsuarioController {
     }
     
     @PostMapping
-    public ResponseEntity<Void> adicionarUsuario(Usuario usuario) {
-        userServi.buscarPorUsuario(usuario);
+    
         
     }
 }
